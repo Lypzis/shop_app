@@ -16,7 +16,7 @@ const ProductCart = props => {
 						onPress={() => console.log("Left button clicked")}
 					/>
 				</View>
-				<Text>{props.price}</Text>
+				<Text>${props.price}</Text>
 				<View style={styles.buttonContainer}>
 					<Button
 						title={props.rightButtonTitle}
@@ -30,14 +30,20 @@ const ProductCart = props => {
 
 const styles = StyleSheet.create({
 	container: {
-		width: "100%",
-		height: 200,
-		borderWidth: 3,
-		borderColor: "#ccc"
+		width: "90%",
+		height: 300,
+		borderColor: "#ccc",
+		justifyContent: "space-between",
+		padding: 20,
+		margin: 20,
+		borderRadius: 4,
+
+		elevation: 3 // remember to make this ios compatible as well
 	},
 	image: {
 		width: "100%",
-		height: "80%"
+		height: "80%",
+		borderRadius: 4
 	},
 	buttonContainer: {
 		width: "35%"
@@ -46,7 +52,8 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: "20%",
 		flexDirection: "row",
-		justifyContent: "space-between"
+		justifyContent: "space-between",
+		alignItems: "center"
 	}
 });
 

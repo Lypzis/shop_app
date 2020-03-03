@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import ProductCard from "../../components/ProductCard";
 
 const ShopScreen = props => {
-	const shopProducts = useSelector(state => state.products.products);
+	const shopProducts = useSelector(state => state.products.availableProducts);
 
 	console.log(shopProducts);
 
