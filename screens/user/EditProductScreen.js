@@ -2,6 +2,8 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 const EditProductScreen = props => {
+	console.log(props.route.params);
+
 	return (
 		<View style={styles.screen}>
 			<Text>The Edit Product Screen!</Text>

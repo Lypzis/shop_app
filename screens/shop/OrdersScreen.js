@@ -11,6 +11,7 @@ const OrdersScreen = props => {
 				<Item
 					title="Favorite"
 					iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
+					color={Platform.OS === "android" ? "#fff" : Colors.primary}
 					onPress={() => props.navigation.toggleDrawer()}
 				/>
 			</HeaderButtons>

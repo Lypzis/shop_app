@@ -4,11 +4,12 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ShopScreen from "../screens/shop/ShopScreen";
 import ProductDetailsScreen from "../screens/shop/ProductDetailsScreen";
 import CheckoutScreen from "../screens/shop/CheckoutScreen";
+import StackScreenGlobalSettings from "../constants/StackScreenGlobalSettings";
 
 const Stack = createStackNavigator();
 
 const ShopNavigator = props => (
-	<Stack.Navigator>
+	<Stack.Navigator screenOptions={StackScreenGlobalSettings}>
 		<Stack.Screen
 			name="ShopScreen"
 			options={{ title: "Shop" }}

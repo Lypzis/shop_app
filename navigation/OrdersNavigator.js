@@ -3,11 +3,12 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import OrdersScreen from "../screens/shop/OrdersScreen";
 import CheckoutScreen from "../screens/shop/CheckoutScreen";
+import StackScreenGlobalSettings from "../constants/StackScreenGlobalSettings";
 
 const Stack = createStackNavigator();
 
 const OrdersNavigator = props => (
-	<Stack.Navigator>
+	<Stack.Navigator screenOptions={StackScreenGlobalSettings}>
 		<Stack.Screen
 			name="OrdersScreen"
 			options={{ title: "My Orders" }}

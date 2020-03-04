@@ -15,6 +15,7 @@ const ShopScreen = props => {
 				<Item
 					title="Favorite"
 					iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
+					color={Platform.OS === "android" ? "#fff" : Colors.primary}
 					onPress={() => props.navigation.toggleDrawer()}
 				/>
 			</HeaderButtons>
@@ -35,7 +36,7 @@ const ShopScreen = props => {
 						rightButtonTitle="Cart"
 						rightButtonFunction={() => props.navigation.navigate("CheckoutScreen")}
 						leftButtonFunction={() =>
-							props.navigation.navigate("ProductDetailsScreen")
+							props.navigation.navigate("ProductDetailsScreen", itemData.item)
 						}
 					/>
 				)}
