@@ -1,169 +1,79 @@
 import React from "react";
-import { Platform, Text } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Ionicons } from "@expo/vector-icons";
-/*
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-*/
-
 
 import ShopScreen from "../screens/shop/ShopScreen";
-import OrdersScreen from '../screens/shop/OrdersScreen';
-import ProductDetailsScreen from '../screens/shop/ProductDetailsScreen';
-import S
+import OrdersScreen from "../screens/shop/OrdersScreen";
+import ProductDetailsScreen from "../screens/shop/ProductDetailsScreen";
+import CheckoutScreen from "../screens/shop/CheckoutScreen";
+
+import EditProductScreen from "../screens/user/EditProductScreen";
+import UserProductsScreen from "../screens/user/UserProductsScreen";
 
 const Stack = createStackNavigator();
 
+const Drawer = createDrawerNavigator();
+
+const StackNavigatorOrders = props => (
+	<Stack.Navigator>
+		<Stack.Screen
+			name="OrdersScreen"
+			options={{ title: "My Orders" }}
+			component={OrdersScreen}
+		/>
+		<Stack.Screen
+			name="CheckoutScreen"
+			options={{ title: "Checkout" }}
+			component={CheckoutScreen}
+		/>
+	</Stack.Navigator>
+);
+
+const StackNavigatorEditProduct = props => (
+	<Stack.Navigator>
+		<Stack.Screen
+			name="MyProductsScreen"
+			options={{ title: "My Products" }}
+			component={UserProductsScreen}
+		/>
+		<Stack.Screen
+			name="EditProductScreen"
+			options={{ title: "Edit Product" }}
+			component={EditProductScreen}
+		/>
+	</Stack.Navigator>
+);
+
 const StackNavigatorShop = props => (
-    <Stack.Navigator>
-        <Stack.Screen />
-        <Stack.Screen />
-        <Stack.Screen />
-        <Stack.Screen />
-        <Stack.Screen />
-    </Stack.Navigator>
+	<Stack.Navigator>
+		<Stack.Screen
+			name="ShopScreen"
+			options={{ title: "Shop" }}
+			component={ShopScreen}
+		/>
+		<Stack.Screen
+			name="ProductDetailsScreen"
+			options={{ title: "Product Details" }}
+			component={ProductDetailsScreen}
+		/>
+		<Stack.Screen
+			name="CheckoutScreen"
+			options={{ title: "Checkout" }}
+			component={CheckoutScreen}
+		/>
+	</Stack.Navigator>
 );
 
-
-/*
-const StackNavigatorFilter = props => (
-  <Stack.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: Platform.OS === "android" ? Colors.primary : "#fff"
-      },
-      headerTintColor: Platform.OS === "android" ? "#fff" : Colors.primary
-    }}
-  >
-    <Stack.Screen
-      name="favoritesScreen"
-      options={{ title: "Your Favorites" }}
-      component={FilterScreen}
-    />
-  </Stack.Navigator>
+const DrawerNavigatorShop = props => (
+	<Drawer.Navigator>
+		<Drawer.Screen name="Shop" component={StackNavigatorShop} />
+		<Drawer.Screen name="Orders" component={StackNavigatorOrders} />
+		<Drawer.Screen
+			name="MyProducts"
+			options={{ title: "My Products" }}
+			component={StackNavigatorEditProduct}
+		/>
+	</Drawer.Navigator>
 );
 
-const StackNavigatorFavorites = props => (
-  <Stack.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: Platform.OS === "android" ? Colors.primary : "#fff"
-      },
-      headerTintColor: Platform.OS === "android" ? "#fff" : Colors.primary
-    }}
-  >
-    <Stack.Screen
-      name="favoritesScreen"
-      options={{ title: "Your Favorites" }}
-      component={Favorites}
-    />
-    <Stack.Screen
-      name="mealDetailScreen"
-      options={{ title: "Meal Details" }}
-      component={MealDetailScreen}
-    />
-  </Stack.Navigator>
-);
-
-const StackNavigatorMeals = props => (
-  <Stack.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: Platform.OS === "android" ? Colors.primary : "#fff"
-      },
-      headerTitleStyle: {
-        fontFamily: "open-sans-bold"
-      },
-      headerBackTitleStyle: {
-        fontFamily: "open-sans"
-      },
-      headerTintColor: Platform.OS === "android" ? "#fff" : Colors.primary
-    }}
-  >
-    <Stack.Screen
-      name="categoriesScreen"
-      options={{ title: "Meal Categories" }}
-      component={CategoriesScreen}
-    />
-    <Stack.Screen
-      name="categoryMealScreen"
-      options={{ title: "Meals" }}
-      component={CategoryMealsScreen}
-    />
-    <Stack.Screen
-      name="mealDetailScreen"
-      options={{ title: "Meal Details" }}
-      component={MealDetailScreen}
-    />
-    <Stack.Screen
-      name="favoriteScreen"
-      options={{ title: "A Screen" }}
-      component={Favorites}
-    />
-  </Stack.Navigator>
-);
-
-const TabNavigator = props => (
-  <Tab.Navigator
-    tabBarOptions={{
-      activeTintColor: Colors.secondary,
-      labelStyle: {
-        fontFamily: "open-sans-bold"
-      }
-    }}
-    barStyle={{ backgroundColor: Colors.primary }}
-  >
-    <Tab.Screen
-      name="Meals"
-      options={{
-        tabBarLabel:
-          Platform.OS === "android" ? (
-            <Text style={{ fontFamily: "open-sans-bold" }}>Meals</Text>
-          ) : (
-            "Meals"
-          ),
-        tabBarIcon: tabInfo => {
-          return (
-            <Ionicons name="ios-restaurant" size={25} color={tabInfo.color} />
-          );
-        }
-      }}
-      component={StackNavigatorMeals}
-    />
-    <Tab.Screen
-      name="Favorites"
-      options={{
-        tabBarLabel:
-          Platform.OS === "android" ? (
-            <Text style={{ fontFamily: "open-sans-bold" }}>Favorites</Text>
-          ) : (
-            "Favorites"
-          ),
-        //tabBarLabel: "Favorites!!!!",
-        tabBarIcon: tabInfo => {
-          return <Ionicons name="ios-star" size={25} color={tabInfo.color} />;
-        }
-      }}
-      component={StackNavigatorFavorites}
-    />
-  </Tab.Navigator>
-);
-
-const DrawerNavigator = props => (
-  <Drawer.Navigator
-    drawerContentOptions={{
-      activeTintColor: Colors.secondary,
-      labelStyle: {
-        fontFamily: "open-sans-bold"
-      }
-    }}
-  >
-    <Drawer.Screen name="Home" component={TabNavigator} />
-    <Drawer.Screen name="Filter" component={StackNavigatorFilter} />
-  </Drawer.Navigator>
-);
-
-
-export default DrawerNavigator;*/
+export default DrawerNavigatorShop;

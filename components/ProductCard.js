@@ -11,16 +11,13 @@ const ProductCart = props => {
 			<Image source={{ uri: props.source }} style={styles.image} />
 			<View style={styles.footerContainer}>
 				<View style={styles.buttonContainer}>
-					<Button
-						title={props.leftButtonTitle}
-						onPress={() => console.log("Left button clicked")}
-					/>
+					<Button title={props.leftButtonTitle} onPress={props.leftButtonFunction} />
 				</View>
 				<Text>${props.price}</Text>
 				<View style={styles.buttonContainer}>
 					<Button
 						title={props.rightButtonTitle}
-						onPress={() => console.log("Right button clicked")}
+						onPress={props.rightButtonFunction}
 					/>
 				</View>
 			</View>
