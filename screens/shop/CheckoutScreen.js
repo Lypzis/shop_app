@@ -3,7 +3,12 @@ import { View, Text, StyleSheet, FlatList, Button } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
 import CartItem from "../../components/CartItem";
-import { removeProductFromCart, getTotal } from "../../store/actions/cart";
+import {
+	removeProductFromCart,
+	getTotal,
+	removeAllProducts
+} from "../../store/actions/cart";
+import { addOrder } from "../../store/actions/orders";
 
 const CheckoutScreen = props => {
 	useEffect(() => {
@@ -28,6 +33,21 @@ const CheckoutScreen = props => {
 		dispatch(getTotal());
 	};
 
+	const eraseCartItems = () => {
+		dispatch(removeAllProducts());
+	};
+
+	const makeOrder = () => {
+		const order = {
+			cartItems: cartItems,
+			total: totalPrice,
+			date: new Date(),
+			id: new Date()
+		};
+
+		dispatch(addOrder(order));
+	};
+
 	return (
 		// order button
 
@@ -40,6 +60,7 @@ const CheckoutScreen = props => {
 							<CartItem
 								key={itemData.item.id}
 								item={itemData.item}
+								hasButton={true}
 								onRemoveItem={removeItem.bind(this, itemData.item.id)}
 							/>
 						)}
@@ -52,7 +73,8 @@ const CheckoutScreen = props => {
 						<Button
 							title="Order"
 							onPress={() => {
-								console.log("Ordered!");
+								makeOrder();
+								eraseCartItems();
 								props.navigation.navigate("ShopScreen");
 							}}
 						/>

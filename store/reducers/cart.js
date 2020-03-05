@@ -1,7 +1,8 @@
 import {
 	ADD_PRODUCT_TO_CART,
 	REMOVE_PRODUCT_FROM_CART,
-	GET_TOTAL
+	GET_TOTAL,
+	REMOVE_ALL_PRODUCTS
 } from "../actions/cart";
 
 const initialState = {
@@ -56,12 +57,18 @@ const removeProductFromCart = (state, id) => {
 	return { ...state, products: stateCopy.products };
 };
 
+const removeAllProducts = state => {
+	return { products: [], total: 0 };
+};
+
 const cartReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case ADD_PRODUCT_TO_CART:
 			return addProductToCart(state, action.product);
 		case REMOVE_PRODUCT_FROM_CART:
 			return removeProductFromCart(state, action.id);
+		case REMOVE_ALL_PRODUCTS:
+			return removeAllProducts(state);
 		case GET_TOTAL:
 			return getTotal(state);
 		default:
