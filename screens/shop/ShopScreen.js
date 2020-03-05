@@ -1,13 +1,17 @@
 import React from "react";
 import { View, Text, StyleSheet, FlatList, Platform } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import ProductCard from "../../components/ProductCard";
 import HeaderButton from "../../components/HeaderButton";
 
+import { addProductToCart } from "../../store/actions/cart";
+
 const ShopScreen = props => {
 	const shopProducts = useSelector(state => state.products.availableProducts);
+
+	const dispatch = useDispatch();
 
 	props.navigation.setOptions({
 		headerLeft: () => (
@@ -19,8 +23,22 @@ const ShopScreen = props => {
 					onPress={() => props.navigation.toggleDrawer()}
 				/>
 			</HeaderButtons>
+		),
+		headerRight: () => (
+			<HeaderButtons HeaderButtonComponent={HeaderButton}>
+				<Item
+					title="Favorite"
+					iconName={Platform.OS === "android" ? "md-cart" : "ios-cart"}
+					color={Platform.OS === "android" ? "#fff" : Colors.primary}
+					onPress={() => props.navigation.navigate("CheckoutScreen")}
+				/>
+			</HeaderButtons>
 		)
 	});
+
+	const addProduct = product => {
+		dispatch(addProductToCart(product));
+	};
 
 	return (
 		<View style={styles.screen}>
@@ -34,7 +52,7 @@ const ShopScreen = props => {
 						price={itemData.item.price}
 						leftButtonTitle="Details"
 						rightButtonTitle="Cart"
-						rightButtonFunction={() => props.navigation.navigate("CheckoutScreen")}
+						rightButtonFunction={() => addProduct(itemData.item)}
 						leftButtonFunction={() =>
 							props.navigation.navigate("ProductDetailsScreen", itemData.item)
 						}
