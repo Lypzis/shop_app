@@ -36,10 +36,10 @@ const OrdersScreen = props => {
 			<FlatList
 				data={orders}
 				renderItem={ItemData => (
-					<View>
+					<View style={styles.order}>
 						<View style={styles.orderHeader}>
-							<Text>${ItemData.item.total.toFixed(2)}</Text>
-							<Text>{ItemData.item.date.toISOString()}</Text>
+							<Text style={styles.headerText}>${ItemData.item.total.toFixed(2)}</Text>
+							<Text style={styles.headerText}>{ItemData.item.date}h</Text>
 							{/*<Text>{ItemData.item.cartItems[0].item.title}</Text>*/}
 						</View>
 						<View style={styles.orderBody}>
@@ -59,11 +59,30 @@ const OrdersScreen = props => {
 const styles = StyleSheet.create({
 	screen: {
 		flex: 1,
-		justifyContent: "center"
+		justifyContent: "center",
+		margin: 30
 	},
 	orderHeader: {
+		padding: 5,
 		flexDirection: "row",
-		justifyContent: "space-between"
+		justifyContent: "space-between",
+		borderColor: "transparent",
+		borderBottomColor: "#ccc",
+		borderWidth: 3
+	},
+	orderBody: {
+		padding: 5
+	},
+	headerText: {
+		fontSize: 20
+	},
+	order: {
+		marginBottom: 15,
+		borderWidth: 3,
+		borderColor: "#ccc",
+		borderRadius: 4,
+
+		elevation: 2
 	}
 });
 

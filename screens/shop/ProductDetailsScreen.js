@@ -7,19 +7,24 @@ import {
 	Button,
 	ScrollView
 } from "react-native";
+import { useDispatch } from "react-redux";
+
+import { addProductToCart } from "../../store/actions/cart";
 
 const ProductDetailScreens = props => {
 	const product = props.route.params;
+
+	const dispatch = useDispatch();
 
 	props.navigation.setOptions({
 		title: product.title
 	});
 
+	const addProduct = product => {
+		dispatch(addProductToCart(product));
+	};
+
 	return (
-		//image
-		//price
-		//description
-		// to cart
 		<ScrollView contentContainerStyle={styles.screen}>
 			<Image
 				source={{ uri: product.imageUrl }}
@@ -33,10 +38,7 @@ const ProductDetailScreens = props => {
 					<Text>{product.description}</Text>
 				</View>
 				<View style={styles.bottomButton}>
-					<Button
-						title="Add to Cart"
-						onPress={() => console.log(product.title + " added to cart!")}
-					/>
+					<Button title="Add to Cart" onPress={addProduct.bind(this, product)} />
 				</View>
 			</View>
 		</ScrollView>

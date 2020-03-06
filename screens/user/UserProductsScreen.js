@@ -8,16 +8,33 @@ import Colors from "../../constants/Colors";
 import ProductCard from "../../components/ProductCard";
 
 const UserProductsScreen = props => {
-	const userProducts = useSelector(state => state.products.userProducts);
+	const userProducts = useSelector(
+		state => state.products.userProducts,
+		() => true
+	);
 
 	props.navigation.setOptions({
 		headerLeft: () => (
 			<HeaderButtons HeaderButtonComponent={HeaderButton}>
 				<Item
-					title="Favorite"
+					title="Menu"
 					iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
 					color={Platform.OS === "android" ? "#fff" : Colors.primary}
 					onPress={() => props.navigation.toggleDrawer()}
+				/>
+			</HeaderButtons>
+		),
+		headerRight: () => (
+			<HeaderButtons HeaderButtonComponent={HeaderButton}>
+				<Item
+					title="Edit"
+					iconName={
+						Platform.OS === "android"
+							? "md-add-circle-outline"
+							: "ios-add-circle-outline"
+					}
+					color={Platform.OS === "android" ? "#fff" : Colors.primary}
+					onPress={() => props.navigation.navigate("EditProductScreen")}
 				/>
 			</HeaderButtons>
 		)

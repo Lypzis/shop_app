@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, FlatList, Platform } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import ProductCard from "../../components/ProductCard";
@@ -9,7 +9,10 @@ import HeaderButton from "../../components/HeaderButton";
 import { addProductToCart } from "../../store/actions/cart";
 
 const ShopScreen = props => {
-	const shopProducts = useSelector(state => state.products.availableProducts);
+	const shopProducts = useSelector(
+		state => state.products.availableProducts,
+		() => false
+	);
 
 	const dispatch = useDispatch();
 
@@ -17,7 +20,7 @@ const ShopScreen = props => {
 		headerLeft: () => (
 			<HeaderButtons HeaderButtonComponent={HeaderButton}>
 				<Item
-					title="Favorite"
+					title="Menu"
 					iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
 					color={Platform.OS === "android" ? "#fff" : Colors.primary}
 					onPress={() => props.navigation.toggleDrawer()}
@@ -27,7 +30,7 @@ const ShopScreen = props => {
 		headerRight: () => (
 			<HeaderButtons HeaderButtonComponent={HeaderButton}>
 				<Item
-					title="Favorite"
+					title="Checkout"
 					iconName={Platform.OS === "android" ? "md-cart" : "ios-cart"}
 					color={Platform.OS === "android" ? "#fff" : Colors.primary}
 					onPress={() => props.navigation.navigate("CheckoutScreen")}
