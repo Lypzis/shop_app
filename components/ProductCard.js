@@ -7,7 +7,7 @@ const ProductCart = props => {
 		// detailbutton price cart
 
 		<View style={styles.container}>
-			<Text>{props.title}</Text>
+			<Text style={styles.title}>{props.title}</Text>
 			<Image source={{ uri: props.source }} style={styles.image} />
 			<View style={styles.footerContainer}>
 				<View style={styles.buttonContainer}>
@@ -32,15 +32,18 @@ const styles = StyleSheet.create({
 		borderColor: "#ccc",
 		justifyContent: "space-between",
 		padding: 20,
+		paddingBottom: 60,
 		margin: 20,
 		borderRadius: 4,
+		backgroundColor: "#fff",
 
 		elevation: 3 // remember to make this ios compatible as well
 	},
 	image: {
 		width: "100%",
 		height: "80%",
-		borderRadius: 4
+		borderRadius: 4,
+		marginVertical: 10
 	},
 	buttonContainer: {
 		width: "35%"
@@ -51,6 +54,10 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center"
+	},
+	title: {
+		textAlign: "center",
+		fontSize: 18
 	}
 });
 
