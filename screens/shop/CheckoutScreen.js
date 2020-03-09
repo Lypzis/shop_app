@@ -52,8 +52,20 @@ const CheckoutScreen = props => {
 		const order = {
 			cartItems: cartItems,
 			total: totalPrice,
-			date: `${date.getDate()}/${date.getMonth() +
-				1}/${date.getFullYear()}, ${hours}:${minutes}:${seconds}`,
+
+			// this will have some issues on android (?)
+			// try using momentjs
+			// moment(date).format('MMMM Do YYYY, hh:mm');
+			date: date.toLocaleString("en-EN", {
+				year: "numeric",
+				month: "long",
+				day: "numeric",
+				hour: "2-digit",
+				minute: "2-digit"
+			}),
+
+			// `${date.getDate()}/${date.getMonth() +
+			// 	1}/${date.getFullYear()}, ${hours}:${minutes}:${seconds}`,
 			id: new Date().toISOString()
 		};
 
