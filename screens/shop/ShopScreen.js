@@ -8,6 +8,8 @@ import HeaderButton from "../../components/HeaderButton";
 
 import { addProductToCart } from "../../store/actions/cart";
 
+import Colors from "../../constants/Colors";
+
 const ShopScreen = props => {
 	const shopProducts = useSelector(
 		state => state.products.availableProducts,

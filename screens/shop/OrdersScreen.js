@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		borderColor: "transparent",
 		borderBottomColor: "#ccc",
-		borderWidth: 3
+		borderBottomWidth: 3
 	},
 	orderBody: {
 		padding: 5

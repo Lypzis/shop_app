@@ -10,6 +10,7 @@ import {
 import { useDispatch } from "react-redux";
 
 import { addProductToCart } from "../../store/actions/cart";
+import Colors from "../../constants/Colors";
 
 const ProductDetailScreens = props => {
 	const product = props.route.params;
@@ -30,15 +31,17 @@ const ProductDetailScreens = props => {
 				source={{ uri: product.imageUrl }}
 				style={{ height: 300, width: "100%" }}
 			/>
-			<View>
-				<Text style={styles.textPrice}>${product.price}</Text>
-			</View>
+			<Text style={styles.textPrice}>${product.price.toFixed(2)}</Text>
 			<View style={styles.innerContent}>
 				<View style={styles.descriptionBox}>
-					<Text>{product.description}</Text>
+					<Text style={styles.description}>{product.description}</Text>
 				</View>
 				<View style={styles.bottomButton}>
-					<Button title="Add to Cart" onPress={addProduct.bind(this, product)} />
+					<Button
+						color={Colors.primary}
+						title="Add to Cart"
+						onPress={addProduct.bind(this, product)}
+					/>
 				</View>
 			</View>
 		</ScrollView>
@@ -47,7 +50,7 @@ const ProductDetailScreens = props => {
 
 const styles = StyleSheet.create({
 	screen: {
-		flex: 1
+		flexGrow: 1
 	},
 	innerContent: {
 		flex: 1,
@@ -57,17 +60,21 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 30
 	},
 	descriptionBox: {
-		marginTop: 10,
+		marginBottom: 15,
 		borderWidth: 3,
 		borderColor: "#ccc",
 		borderRadius: 4,
 		padding: 10
 	},
+	description: {
+		fontFamily: "open-sans"
+	},
 	textPrice: {
 		textAlign: "center",
-		marginTop: 10,
-		color: "green",
-		fontSize: 22
+		marginTop: 20,
+		color: "#888",
+		fontSize: 22,
+		fontFamily: "open-sans-bold"
 	},
 	bottomButton: {}
 });

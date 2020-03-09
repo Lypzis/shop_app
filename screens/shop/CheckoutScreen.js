@@ -9,6 +9,7 @@ import {
 	removeAllProducts
 } from "../../store/actions/cart";
 import { addOrder } from "../../store/actions/orders";
+import Colors from "../../constants/Colors";
 
 const CheckoutScreen = props => {
 	useEffect(() => {
@@ -51,7 +52,7 @@ const CheckoutScreen = props => {
 		const order = {
 			cartItems: cartItems,
 			total: totalPrice,
-			date: `${date.getDay()}/${date.getMonth() +
+			date: `${date.getDate()}/${date.getMonth() +
 				1}/${date.getFullYear()}, ${hours}:${minutes}:${seconds}`,
 			id: new Date().toISOString()
 		};
@@ -77,18 +78,23 @@ const CheckoutScreen = props => {
 						)}
 					/>
 
-					<View style={styles.total}>
-						<Text>Total: ${totalPrice.toFixed(2)}</Text>
-					</View>
-					<View style={styles.orderButton}>
-						<Button
-							title="Order"
-							onPress={() => {
-								makeOrder();
-								eraseCartItems();
-								props.navigation.navigate("ShopScreen");
-							}}
-						/>
+					<View style={styles.totalBox}>
+						<Text style={styles.total}>
+							Total:
+							<Text style={styles.price}> ${totalPrice.toFixed(2)}</Text>
+						</Text>
+
+						<View style={styles.orderButton}>
+							<Button
+								color={Colors.secondary}
+								title="Order"
+								onPress={() => {
+									makeOrder();
+									eraseCartItems();
+									props.navigation.navigate("ShopScreen");
+								}}
+							/>
+						</View>
 					</View>
 				</View>
 			) : (
@@ -111,11 +117,23 @@ const styles = StyleSheet.create({
 	fallbackText: {
 		flex: 1,
 		justifyContent: "center",
-		alignItems: "center"
+		alignItems: "center",
+		fontFamily: "open-sans"
+	},
+	totalBox: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		marginHorizontal: 20
 	},
 	total: {
-		marginBottom: 10,
-		alignItems: "center"
+		marginVertical: 15,
+		textAlign: "center",
+		fontFamily: "open-sans-bold",
+		fontSize: 18
+	},
+	price: {
+		color: Colors.primary
 	},
 	orderButton: {
 		width: "50%",
