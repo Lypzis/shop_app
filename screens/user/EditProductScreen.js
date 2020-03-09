@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, Button } from "react-native";
+import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useDispatch } from "react-redux";
 
@@ -91,27 +91,30 @@ const EditProductScreen = props => {
 	};
 
 	return (
-		<View style={styles.screen}>
-			<View style={styles.inputBoxShort}>
-				<Text>Title:</Text>
+		<ScrollView contentContainerStyle={styles.screen}>
+			<View style={styles.inputBox}>
+				<Text style={styles.label}>Title:</Text>
 				<TextInput
+					style={styles.input}
 					autoFocus={false}
 					value={productInfo.title}
 					onChangeText={text => changeFieldValue(text, "title")}
 				/>
 			</View>
-			<View style={styles.inputBoxShort}>
-				<Text>Price:</Text>
+			<View style={styles.inputBox}>
+				<Text style={styles.label}>Price:</Text>
 				<TextInput
+					style={styles.input}
 					autoFocus={false}
 					keyboardType="numeric"
 					value={productInfo.price.toString()}
 					onChangeText={text => changeFieldValue(text, "price")}
 				/>
 			</View>
-			<View>
-				<Text>Description:</Text>
+			<View style={styles.inputBox}>
+				<Text style={styles.label}>Description:</Text>
 				<TextInput
+					style={styles.input}
 					autoFocus={false}
 					numberOfLines={3}
 					multiline={true}
@@ -119,9 +122,10 @@ const EditProductScreen = props => {
 					onChangeText={text => changeFieldValue(text, "description")}
 				/>
 			</View>
-			<View>
-				<Text>Image Url:</Text>
+			<View style={styles.inputBox}>
+				<Text style={styles.label}>Image Url:</Text>
 				<TextInput
+					style={styles.input}
 					autoFocus={false}
 					numberOfLines={3}
 					multiline={true}
@@ -129,19 +133,29 @@ const EditProductScreen = props => {
 					onChangeText={text => changeFieldValue(text, "imageUrl")}
 				/>
 			</View>
-		</View>
+		</ScrollView>
 	);
 };
 
 const styles = StyleSheet.create({
 	screen: {
 		flex: 1,
+		margin: 20,
 		justifyContent: "flex-start"
 	},
-	inputBoxShort: {
-		flexDirection: "row",
-		alignItems: "center",
-		width: "100%"
+	inputBox: {
+		marginBottom: 12
+	},
+	label: {
+		fontFamily: "open-sans",
+		marginVertical: 8,
+		marginRight: 5
+	},
+	input: {
+		paddingHorizontal: 10,
+		paddingVertical: 2,
+		borderColor: "#ccc",
+		borderBottomWidth: 2
 	}
 });
 
