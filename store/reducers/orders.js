@@ -5,8 +5,6 @@ const initialState = {
 };
 
 const addOrder = (state, order) => {
-	console.log(order);
-
 	const stateCopy = { ...state };
 
 	stateCopy.orders.push(order);

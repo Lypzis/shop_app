@@ -1,5 +1,9 @@
 import PRODUCTS from "../../data/dummy-data";
-import { ADD_USER_PRODUCT, EDIT_USER_PRODUCT } from "../actions/products";
+import {
+	ADD_USER_PRODUCT,
+	EDIT_USER_PRODUCT,
+	DELETE_PRODUCT
+} from "../actions/products";
 
 const initialState = {
 	availableProducts: PRODUCTS,
@@ -34,12 +38,32 @@ const editUserProduct = (state, product) => {
 	};
 };
 
+const deleteProduct = (state, id) => {
+	const userProductCopy = [...state.userProducts];
+	const availableProductsCopy = [...state.availableProducts];
+
+	const userProductsFiltered = userProductCopy.filter(
+		product => product.id !== id
+	);
+	const availableProductsFiltered = availableProductsCopy.filter(
+		product => product.id !== id
+	);
+
+	return {
+		...state,
+		availableProducts: availableProductsFiltered,
+		userProducts: userProductsFiltered
+	};
+};
+
 const productsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case ADD_USER_PRODUCT:
 			return addUserProduct(state, action.product);
 		case EDIT_USER_PRODUCT:
 			return editUserProduct(state, action.product);
+		case DELETE_PRODUCT:
+			return deleteProduct(state, action.productId);
 		default:
 			return state;
 	}

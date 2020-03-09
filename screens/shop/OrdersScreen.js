@@ -27,14 +27,7 @@ const OrdersScreen = props => {
 			</HeaderButtons>
 		)
 	});
-
-	//const renderListofOrders
-
 	return (
-		//list of orders
-		// total,  date
-		// list of items from the order
-
 		<View style={styles.screen}>
 			<FlatList
 				data={orders}

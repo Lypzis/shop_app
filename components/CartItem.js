@@ -22,9 +22,9 @@ const CartItem = props => {
 			<Text style={styles.price}>
 				${(product.item.price * product.qty).toFixed(2)}
 			</Text>
-			{props.hasButton ? (
+			{props.hasButton && (
 				<CustomButton pressed={props.onRemoveItem}>{CustomIcon}</CustomButton>
-			) : null}
+			)}
 		</View>
 	);
 };

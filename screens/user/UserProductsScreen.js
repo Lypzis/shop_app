@@ -1,17 +1,20 @@
 import React from "react";
 import { View, StyleSheet, Platform, FlatList } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import HeaderButton from "../../components/HeaderButton";
 import Colors from "../../constants/Colors";
 import ProductCard from "../../components/ProductCard";
+import { deleteProduct } from "../../store/actions/products";
 
 const UserProductsScreen = props => {
 	const userProducts = useSelector(
 		state => state.products.userProducts,
-		() => true
+		() => false
 	);
+
+	const dispatch = useDispatch();
 
 	props.navigation.setOptions({
 		headerLeft: () => (
@@ -28,17 +31,17 @@ const UserProductsScreen = props => {
 			<HeaderButtons HeaderButtonComponent={HeaderButton}>
 				<Item
 					title="Edit"
-					iconName={
-						Platform.OS === "android"
-							? "md-add-circle-outline"
-							: "ios-add-circle-outline"
-					}
+					iconName={Platform.OS === "android" ? "md-create" : "ios-create"}
 					color={Platform.OS === "android" ? "#fff" : Colors.primary}
 					onPress={() => props.navigation.navigate("EditProductScreen")}
 				/>
 			</HeaderButtons>
 		)
 	});
+
+	const deleteMyProduct = id => {
+		dispatch(deleteProduct(id));
+	};
 
 	return (
 		<View style={styles.screen}>
@@ -55,7 +58,7 @@ const UserProductsScreen = props => {
 						leftButtonFunction={() =>
 							props.navigation.navigate("EditProductScreen", itemData.item)
 						}
-						rightButtonFunction={() => console.log(`${itemData.item.title} Deleted!`)}
+						rightButtonFunction={() => deleteMyProduct(itemData.item.id)}
 					/>
 				)}
 			/>

@@ -7,6 +7,9 @@ import Colors from "../constants/Colors";
 const Order = props => {
 	const [showDetails, toggleShowDetails] = useState(false);
 
+	// ternary expression at showDetails,
+	// can be written that way because if false,
+	// will return null, so it a shorter syntax
 	return (
 		<View style={styles.order}>
 			<View style={styles.orderHeader}>
@@ -15,13 +18,13 @@ const Order = props => {
 				{/*<Text>{props.orderData.cartItems[0].item.title}</Text>*/}
 			</View>
 
-			{showDetails ? (
+			{showDetails && (
 				<View style={styles.orderBody}>
 					{props.orderData.cartItems.map(cartItem => (
 						<CartItem key={cartItem.id} item={cartItem} />
 					))}
 				</View>
-			) : null}
+			)}
 
 			<Button
 				color={Colors.secondary}

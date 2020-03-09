@@ -17,6 +17,7 @@ const EditProductScreen = props => {
 	const dispatch = useDispatch();
 
 	props.navigation.setOptions({
+		title: props.route.params !== undefined ? "Edit Product" : "Create Product",
 		headerRight: () => (
 			<HeaderButtons HeaderButtonComponent={HeaderButton}>
 				<Item
