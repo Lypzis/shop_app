@@ -1,33 +1,33 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useDispatch } from 'react-redux';
 
-import Product from "../../models/product";
-import HeaderButton from "../../components/HeaderButton";
-import { addUserProduct, editUserProduct } from "../../store/actions/products";
+import Product from '../../models/product';
+import HeaderButton from '../../components/HeaderButton';
+import { addUserProduct, editUserProduct } from '../../store/actions/products';
 
 const EditProductScreen = props => {
 	// the owner and item id are hardcorded just for the moment,
 	// for science you know :D
 	const [productInfo, setProductInfo] = useState(
-		new Product("f" + Math.random() * 10, "u1", "", "", "", "")
+		new Product('f' + Math.random() * 10, 'u1', '', '', '', '')
 	);
 
 	const dispatch = useDispatch();
 
 	props.navigation.setOptions({
-		title: props.route.params !== undefined ? "Edit Product" : "Create Product",
+		title: props.route.params !== undefined ? 'Edit Product' : 'Create Product',
 		headerRight: () => (
 			<HeaderButtons HeaderButtonComponent={HeaderButton}>
 				<Item
 					title="Confirm"
 					iconName={
-						Platform.OS === "android"
-							? "md-checkmark-circle-outline"
-							: "ios-checkmark-circle-outline"
+						Platform.OS === 'android'
+							? 'md-checkmark-circle-outline'
+							: 'ios-checkmark-circle-outline'
 					}
-					color={Platform.OS === "android" ? "#fff" : Colors.primary}
+					color={Platform.OS === 'android' ? '#fff' : Colors.primary}
 					onPress={props.route.params !== undefined ? edit : save}
 				/>
 			</HeaderButtons>
@@ -55,16 +55,16 @@ const EditProductScreen = props => {
 		const stateCopy = { ...productInfo };
 
 		switch (field) {
-			case "title":
+			case 'title':
 				stateCopy.title = text;
 				break;
-			case "price":
+			case 'price':
 				stateCopy.price = text;
 				break;
-			case "description":
+			case 'description':
 				stateCopy.description = text;
 				break;
-			case "imageUrl":
+			case 'imageUrl':
 				stateCopy.imageUrl = text;
 				break;
 			default:
@@ -74,20 +74,28 @@ const EditProductScreen = props => {
 		return setProductInfo(stateCopy);
 	};
 
-	const edit = () => {
-		dispatch(editUserProduct(productInfo));
+	const edit = useCallback(() => {
+		if (checkProductInfo()) {
+			dispatch(editUserProduct(productInfo));
+			props.navigation.replace('MyProductsScreen');
+		} else console.log('Something is missing!');
+	}, []);
 
-		props.navigation.replace("MyProductsScreen");
-	};
+	const save = useCallback(() => {
+		if (checkProductInfo()) {
+			dispatch(addUserProduct(productInfo));
 
-	const save = () => {
-		//check formats
+			props.navigation.replace('MyProductsScreen');
+		} else console.log('Something is missing!');
+	}, []);
 
-		// add user item
-		dispatch(addUserProduct(productInfo));
+	const checkProductInfo = () => {
+		if (productInfo.description.trim() === '') return false;
+		if (productInfo.imageUrl.trim() === '') return false;
+		if (productInfo.price.toString().trim() === '') return false;
+		if (productInfo.title.trim() === '') return false;
 
-		// go back
-		props.navigation.replace("MyProductsScreen");
+		return true;
 	};
 
 	return (
@@ -98,19 +106,22 @@ const EditProductScreen = props => {
 					style={styles.input}
 					autoFocus={false}
 					value={productInfo.title}
-					onChangeText={text => changeFieldValue(text, "title")}
+					onChangeText={text => changeFieldValue(text, 'title')}
 				/>
 			</View>
-			<View style={styles.inputBox}>
-				<Text style={styles.label}>Price:</Text>
-				<TextInput
-					style={styles.input}
-					autoFocus={false}
-					keyboardType="numeric"
-					value={productInfo.price.toString()}
-					onChangeText={text => changeFieldValue(text, "price")}
-				/>
-			</View>
+			{props.route.params === undefined && (
+				<View style={styles.inputBox}>
+					<Text style={styles.label}>Price:</Text>
+					<TextInput
+						style={styles.input}
+						autoFocus={false}
+						keyboardType="numeric"
+						value={productInfo.price.toString()}
+						onChangeText={text => changeFieldValue(text, 'price')}
+					/>
+				</View>
+			)}
+
 			<View style={styles.inputBox}>
 				<Text style={styles.label}>Description:</Text>
 				<TextInput
@@ -119,7 +130,7 @@ const EditProductScreen = props => {
 					numberOfLines={3}
 					multiline={true}
 					value={productInfo.description}
-					onChangeText={text => changeFieldValue(text, "description")}
+					onChangeText={text => changeFieldValue(text, 'description')}
 				/>
 			</View>
 			<View style={styles.inputBox}>
@@ -130,7 +141,7 @@ const EditProductScreen = props => {
 					numberOfLines={3}
 					multiline={true}
 					value={productInfo.imageUrl}
-					onChangeText={text => changeFieldValue(text, "imageUrl")}
+					onChangeText={text => changeFieldValue(text, 'imageUrl')}
 				/>
 			</View>
 		</ScrollView>
@@ -141,20 +152,20 @@ const styles = StyleSheet.create({
 	screen: {
 		flex: 1,
 		margin: 20,
-		justifyContent: "flex-start"
+		justifyContent: 'flex-start'
 	},
 	inputBox: {
 		marginBottom: 12
 	},
 	label: {
-		fontFamily: "open-sans",
+		fontFamily: 'open-sans',
 		marginVertical: 8,
 		marginRight: 5
 	},
 	input: {
 		paddingHorizontal: 10,
 		paddingVertical: 2,
-		borderColor: "#ccc",
+		borderColor: '#ccc',
 		borderBottomWidth: 2
 	}
 });

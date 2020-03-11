@@ -1,11 +1,11 @@
-import React from "react";
-import { View, StyleSheet, FlatList } from "react-native";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { useSelector } from "react-redux";
+import React from 'react';
+import { View, StyleSheet, FlatList, Text } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useSelector } from 'react-redux';
 
-import HeaderButton from "../../components/HeaderButton";
-import Colors from "../../constants/Colors";
-import Order from "../../components/Order";
+import HeaderButton from '../../components/HeaderButton';
+import Colors from '../../constants/Colors';
+import Order from '../../components/Order';
 
 const OrdersScreen = props => {
 	const orders = useSelector(
@@ -20,8 +20,8 @@ const OrdersScreen = props => {
 			<HeaderButtons HeaderButtonComponent={HeaderButton}>
 				<Item
 					title="Favorite"
-					iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
-					color={Platform.OS === "android" ? "#fff" : Colors.primary}
+					iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
+					color={Platform.OS === 'android' ? '#fff' : Colors.primary}
 					onPress={() => props.navigation.toggleDrawer()}
 				/>
 			</HeaderButtons>
@@ -29,10 +29,16 @@ const OrdersScreen = props => {
 	});
 	return (
 		<View style={styles.screen}>
-			<FlatList
-				data={orders}
-				renderItem={ItemData => <Order orderData={ItemData.item} />}
-			/>
+			{orders.length > 0 ? (
+				<FlatList
+					data={orders}
+					renderItem={ItemData => <Order orderData={ItemData.item} />}
+				/>
+			) : (
+				<View style={styles.fallbackText}>
+					<Text>-- You Haven't ordered anything yet... --</Text>
+				</View>
+			)}
 		</View>
 	);
 };
@@ -40,8 +46,14 @@ const OrdersScreen = props => {
 const styles = StyleSheet.create({
 	screen: {
 		flex: 1,
-		justifyContent: "center",
+		justifyContent: 'center',
 		margin: 30
+	},
+	fallbackText: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		fontFamily: 'open-sans'
 	}
 });
 
