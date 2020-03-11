@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch } from 'react-redux';
 
+import HeaderButton from '../../components/UI/HeaderButton';
 import Product from '../../models/product';
-import HeaderButton from '../../components/HeaderButton';
 import { addUserProduct, editUserProduct } from '../../store/actions/products';
 
 const EditProductScreen = props => {
@@ -74,20 +74,20 @@ const EditProductScreen = props => {
 		return setProductInfo(stateCopy);
 	};
 
-	const edit = useCallback(() => {
+	const edit = () => {
 		if (checkProductInfo()) {
 			dispatch(editUserProduct(productInfo));
 			props.navigation.replace('MyProductsScreen');
 		} else console.log('Something is missing!');
-	}, []);
+	};
 
-	const save = useCallback(() => {
+	const save = () => {
 		if (checkProductInfo()) {
 			dispatch(addUserProduct(productInfo));
 
 			props.navigation.replace('MyProductsScreen');
 		} else console.log('Something is missing!');
-	}, []);
+	};
 
 	const checkProductInfo = () => {
 		if (productInfo.description.trim() === '') return false;
@@ -127,8 +127,6 @@ const EditProductScreen = props => {
 				<TextInput
 					style={styles.input}
 					autoFocus={false}
-					numberOfLines={3}
-					multiline={true}
 					value={productInfo.description}
 					onChangeText={text => changeFieldValue(text, 'description')}
 				/>
@@ -138,8 +136,6 @@ const EditProductScreen = props => {
 				<TextInput
 					style={styles.input}
 					autoFocus={false}
-					numberOfLines={3}
-					multiline={true}
 					value={productInfo.imageUrl}
 					onChangeText={text => changeFieldValue(text, 'imageUrl')}
 				/>

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
 	View,
 	Text,
@@ -8,14 +8,14 @@ import {
 	TouchableOpacity,
 	TouchableNativeFeedback,
 	Platform
-} from "react-native";
+} from 'react-native';
 
-import Colors from "../constants/Colors";
+import Colors from '../../constants/Colors';
 
 const ProductCart = props => {
 	let TouchableComp = TouchableOpacity;
 
-	if (Platform.OS === "android" && Platform.Version >= 21)
+	if (Platform.OS === 'android' && Platform.Version >= 21)
 		TouchableComp = TouchableNativeFeedback;
 
 	return (
@@ -51,44 +51,44 @@ const ProductCart = props => {
 
 const styles = StyleSheet.create({
 	container: {
-		width: "90%",
+		width: '90%',
 		height: 300,
-		borderColor: "#ccc",
-		justifyContent: "space-between",
+		borderColor: '#ccc',
+		justifyContent: 'space-between',
 		padding: 20,
 		paddingBottom: 60,
 		marginHorizontal: 20,
 		marginVertical: 15,
 		borderRadius: 5,
-		backgroundColor: "#fff",
+		backgroundColor: '#fff',
 
 		elevation: 3 // remember to make this ios compatible as well
 	},
 	image: {
-		width: "100%",
-		height: "80%",
+		width: '100%',
+		height: '80%',
 		borderRadius: 5
 	},
 	buttonContainer: {
-		width: "35%"
+		width: '35%'
 	},
 	footerContainer: {
-		width: "100%",
-		height: "20%",
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center"
+		width: '100%',
+		height: '20%',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center'
 	},
 	title: {
-		textAlign: "center",
+		textAlign: 'center',
 		fontSize: 18,
 		marginVertical: 10,
-		fontFamily: "open-sans-bold"
+		fontFamily: 'open-sans-bold'
 	},
 	price: {
 		fontSize: 14,
-		color: "#888",
-		fontFamily: "open-sans"
+		color: '#888',
+		fontFamily: 'open-sans'
 	}
 });
 

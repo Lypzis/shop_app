@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, Button } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, Button } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 
-import CartItem from "../../components/CartItem";
+import CartItem from '../../components/shop/CartItem';
 import {
 	removeProductFromCart,
 	getTotal,
 	removeAllProducts
-} from "../../store/actions/cart";
-import { addOrder } from "../../store/actions/orders";
-import Colors from "../../constants/Colors";
+} from '../../store/actions/cart';
+import { addOrder } from '../../store/actions/orders';
+import Colors from '../../constants/Colors';
 
 const CheckoutScreen = props => {
 	useEffect(() => {
@@ -45,9 +45,9 @@ const CheckoutScreen = props => {
 		let minutes = date.getMinutes();
 		let seconds = date.getSeconds();
 
-		if (hours < 10) hours = "0" + hours;
-		if (minutes < 10) minutes = "0" + minutes;
-		if (seconds < 10) seconds = "0" + seconds;
+		if (hours < 10) hours = '0' + hours;
+		if (minutes < 10) minutes = '0' + minutes;
+		if (seconds < 10) seconds = '0' + seconds;
 
 		const order = {
 			cartItems: cartItems,
@@ -56,12 +56,12 @@ const CheckoutScreen = props => {
 			// this will have some issues on android (?)
 			// try using momentjs
 			// moment(date).format('MMMM Do YYYY, hh:mm');
-			date: date.toLocaleString("en-EN", {
-				year: "numeric",
-				month: "long",
-				day: "numeric",
-				hour: "2-digit",
-				minute: "2-digit"
+			date: date.toLocaleString('en-EN', {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit'
 			}),
 
 			// `${date.getDate()}/${date.getMonth() +
@@ -103,7 +103,7 @@ const CheckoutScreen = props => {
 								onPress={() => {
 									makeOrder();
 									eraseCartItems();
-									props.navigation.navigate("ShopScreen");
+									props.navigation.navigate('ShopScreen');
 								}}
 							/>
 						</View>
@@ -121,35 +121,35 @@ const CheckoutScreen = props => {
 const styles = StyleSheet.create({
 	screen: {
 		flex: 1,
-		justifyContent: "flex-start"
+		justifyContent: 'flex-start'
 	},
 	list: {
-		alignItems: "center"
+		alignItems: 'center'
 	},
 	fallbackText: {
 		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-		fontFamily: "open-sans"
+		justifyContent: 'center',
+		alignItems: 'center',
+		fontFamily: 'open-sans'
 	},
 	totalBox: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
 		marginHorizontal: 20
 	},
 	total: {
 		marginVertical: 15,
-		textAlign: "center",
-		fontFamily: "open-sans-bold",
+		textAlign: 'center',
+		fontFamily: 'open-sans-bold',
 		fontSize: 18
 	},
 	price: {
 		color: Colors.primary
 	},
 	orderButton: {
-		width: "50%",
-		alignSelf: "center",
+		width: '50%',
+		alignSelf: 'center',
 		marginBottom: 10
 	}
 });

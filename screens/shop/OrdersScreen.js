@@ -3,9 +3,9 @@ import { View, StyleSheet, FlatList, Text } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector } from 'react-redux';
 
-import HeaderButton from '../../components/HeaderButton';
+import HeaderButton from '../../components/UI/HeaderButton';
+import Order from '../../components/shop/Order';
 import Colors from '../../constants/Colors';
-import Order from '../../components/Order';
 
 const OrdersScreen = props => {
 	const orders = useSelector(

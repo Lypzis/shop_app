@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
 	View,
 	Text,
@@ -6,11 +6,11 @@ import {
 	Image,
 	Button,
 	ScrollView
-} from "react-native";
-import { useDispatch } from "react-redux";
+} from 'react-native';
+import { useDispatch } from 'react-redux';
 
-import { addProductToCart } from "../../store/actions/cart";
-import Colors from "../../constants/Colors";
+import { addProductToCart } from '../../store/actions/cart';
+import Colors from '../../constants/Colors';
 
 const ProductDetailScreens = props => {
 	const product = props.route.params;
@@ -29,9 +29,9 @@ const ProductDetailScreens = props => {
 		<ScrollView contentContainerStyle={styles.screen}>
 			<Image
 				source={{ uri: product.imageUrl }}
-				style={{ height: 300, width: "100%" }}
+				style={{ height: 300, width: '100%' }}
 			/>
-			<Text style={styles.textPrice}>${product.price.toFixed(2)}</Text>
+			<Text style={styles.textPrice}>${product.price}</Text>
 			<View style={styles.innerContent}>
 				<View style={styles.descriptionBox}>
 					<Text style={styles.description}>{product.description}</Text>
@@ -54,27 +54,27 @@ const styles = StyleSheet.create({
 	},
 	innerContent: {
 		flex: 1,
-		alignItems: "center",
-		justifyContent: "space-between",
+		alignItems: 'center',
+		justifyContent: 'space-between',
 		paddingVertical: 20,
 		paddingHorizontal: 30
 	},
 	descriptionBox: {
 		marginBottom: 15,
 		borderWidth: 3,
-		borderColor: "#ccc",
+		borderColor: '#ccc',
 		borderRadius: 4,
 		padding: 10
 	},
 	description: {
-		fontFamily: "open-sans"
+		fontFamily: 'open-sans'
 	},
 	textPrice: {
-		textAlign: "center",
+		textAlign: 'center',
 		marginTop: 20,
-		color: "#888",
+		color: '#888',
 		fontSize: 22,
-		fontFamily: "open-sans-bold"
+		fontFamily: 'open-sans-bold'
 	},
 	bottomButton: {}
 });

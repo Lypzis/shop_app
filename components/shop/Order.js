@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { View, Button, Text, StyleSheet } from "react-native";
+import React, { useState } from 'react';
+import { View, Button, Text, StyleSheet } from 'react-native';
 
-import CartItem from "./CartItem";
-import Colors from "../constants/Colors";
+import CartItem from './CartItem';
+import Colors from '../../constants/Colors';
 
 const Order = props => {
 	const [showDetails, toggleShowDetails] = useState(false);
@@ -38,10 +38,10 @@ const Order = props => {
 const styles = StyleSheet.create({
 	orderHeader: {
 		padding: 15,
-		flexDirection: "row",
-		justifyContent: "space-between",
-		borderColor: "transparent",
-		borderBottomColor: "#ccc",
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		borderColor: 'transparent',
+		borderBottomColor: '#ccc',
 		borderBottomWidth: 3
 	},
 	orderBody: {
@@ -49,12 +49,12 @@ const styles = StyleSheet.create({
 	},
 	headerText: {
 		fontSize: 16,
-		fontFamily: "open-sans-bold"
+		fontFamily: 'open-sans-bold'
 	},
 	order: {
 		marginBottom: 15,
 		borderWidth: 3,
-		borderColor: "#ccc",
+		borderColor: '#ccc',
 		borderRadius: 4,
 
 		elevation: 2

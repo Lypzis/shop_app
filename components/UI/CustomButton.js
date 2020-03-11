@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 import {
 	Platform,
 	TouchableOpacity,
 	TouchableNativeFeedback,
 	StyleSheet,
 	View
-} from "react-native";
+} from 'react-native';
 
-import Colors from "../constants/Colors";
+import Colors from '../../constants/Colors';
 
 const CustomButton = props => (
 	<View>
-		{Platform.OS === "android" && Platform.Version >= 21 ? (
+		{Platform.OS === 'android' && Platform.Version >= 21 ? (
 			<TouchableNativeFeedback onPress={props.pressed}>
 				<View style={styles.button}>{props.children}</View>
 			</TouchableNativeFeedback>

@@ -1,16 +1,16 @@
-import React from "react";
-import { View, Text, StyleSheet, Platform } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import React from 'react';
+import { View, Text, StyleSheet, Platform } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-import CustomButton from "./CustomButton";
-import Colors from "../constants/Colors";
+import CustomButton from '../UI/CustomButton';
+import Colors from '../../constants/Colors';
 
 const CartItem = props => {
 	let CustomIcon = (
 		<Ionicons name="ios-remove" size={32} color={Colors.primary} />
 	);
 
-	if (Platform.OS === "android" && Platform.Version >= 21)
+	if (Platform.OS === 'android' && Platform.Version >= 21)
 		CustomIcon = <Ionicons name="md-remove" size={32} color="#fff" />;
 
 	const product = props.item;
@@ -31,27 +31,27 @@ const CartItem = props => {
 
 const styles = StyleSheet.create({
 	cartItem: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
 		marginHorizontal: 20,
 		marginVertical: 8,
-		borderBottomColor: "#ccc",
+		borderBottomColor: '#ccc',
 		borderBottomWidth: 3,
 		paddingBottom: 9
 	},
 	quatity: {
 		fontSize: 18,
-		fontFamily: "open-sans"
+		fontFamily: 'open-sans'
 	},
 	title: {
 		fontSize: 18,
-		textAlign: "center",
-		fontFamily: "open-sans-bold"
+		textAlign: 'center',
+		fontFamily: 'open-sans-bold'
 	},
 	price: {
 		fontSize: 14,
-		fontFamily: "open-sans-bold"
+		fontFamily: 'open-sans-bold'
 	}
 });
 
