@@ -4,8 +4,8 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
 
 import HeaderButton from '../../components/UI/HeaderButton';
-import Colors from '../../constants/Colors';
 import ProductCard from '../../components/UI/ProductCard';
+import Colors from '../../constants/Colors';
 import { deleteProduct } from '../../store/actions/products';
 
 const UserProductsScreen = props => {

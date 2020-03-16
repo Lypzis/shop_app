@@ -1,11 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
+import React, { useState, useEffect, useReducer } from 'react';
+import {
+	View,
+	Text,
+	StyleSheet,
+	TextInput,
+	ScrollView,
+	Alert
+} from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch } from 'react-redux';
 
 import HeaderButton from '../../components/UI/HeaderButton';
 import Product from '../../models/product';
 import { addUserProduct, editUserProduct } from '../../store/actions/products';
+import Input from '../../components/UI/Input';
 
 const EditProductScreen = props => {
 	// the owner and item id are hardcorded just for the moment,
@@ -15,6 +23,34 @@ const EditProductScreen = props => {
 	);
 
 	const dispatch = useDispatch();
+
+	// Example of 'useReducer'
+	// const initialReducerState = {
+	// 	inputValues: {
+	// 		title: props.route.params ? props.route.params.title : '',
+	// 		imageUrl: props.route.params ? props.route.params.imageUrl : '',
+	// 		description: props.route.params ? props.route.params.description : '',
+	// 		price: ''
+	// 	},
+	// 	inputValidities: {
+	// 		title: props.route.params ? true : false,
+	// 		imageUrl: props.route.params ? true : false,
+	// 		description: props.route.params ? true : false,
+	// 		price: props.route.params ? true : false
+	// 	},
+	// 	formIsValid: props.route.params ? true : false
+	// };
+
+	// // example of useReducer
+	// // this is not related to react-redux
+	// const formReducer = (state, action) => {
+	// 	if (action.type === 'UPDATE') console.log('Update :DDD');
+	// };
+
+	// const [formState, dispatchFormState] = useReducer(
+	// 	formReducer,
+	// 	initialReducerState
+	// );
 
 	props.navigation.setOptions({
 		title: props.route.params !== undefined ? 'Edit Product' : 'Create Product',
@@ -74,11 +110,22 @@ const EditProductScreen = props => {
 		return setProductInfo(stateCopy);
 	};
 
+	const showAlert = () => {
+		Alert.alert(
+			'Something is Wrong',
+			'It seems one or more inputs are empty, please fill all of them before submiting.',
+			[{ text: 'Ok', style: 'default' }]
+		);
+	};
+
 	const edit = () => {
+		// example purposes
+		//dispatchFormState({ type: 'UPDATE', value: productInfo, ... });
+
 		if (checkProductInfo()) {
 			dispatch(editUserProduct(productInfo));
 			props.navigation.replace('MyProductsScreen');
-		} else console.log('Something is missing!');
+		} else showAlert();
 	};
 
 	const save = () => {
@@ -86,7 +133,7 @@ const EditProductScreen = props => {
 			dispatch(addUserProduct(productInfo));
 
 			props.navigation.replace('MyProductsScreen');
-		} else console.log('Something is missing!');
+		} else showAlert();
 	};
 
 	const checkProductInfo = () => {
@@ -100,46 +147,42 @@ const EditProductScreen = props => {
 
 	return (
 		<ScrollView contentContainerStyle={styles.screen}>
-			<View style={styles.inputBox}>
-				<Text style={styles.label}>Title:</Text>
-				<TextInput
-					style={styles.input}
-					autoFocus={false}
-					value={productInfo.title}
-					onChangeText={text => changeFieldValue(text, 'title')}
-				/>
-			</View>
+			<Input
+				autoFocus={false}
+				keyboardType="default"
+				autoCapitalize="sentences"
+				autoCorrect
+				returnKeyType="next" // how the 'submit' button is presented
+				onEndEditing={() => console.log('Finished')}
+				onSubmitEditing={() => console.log('Submitted')}
+				label="Title"
+				value={productInfo.title}
+				changeValue={text => changeFieldValue(text, 'title')}
+			/>
+			<Input
+				label="Image Url"
+				keyboardType="default"
+				value={productInfo.imageUrl}
+				changeValue={text => changeFieldValue(text, 'imageUrl')}
+			/>
 			{props.route.params === undefined && (
-				<View style={styles.inputBox}>
-					<Text style={styles.label}>Price:</Text>
-					<TextInput
-						style={styles.input}
-						autoFocus={false}
-						keyboardType="numeric"
-						value={productInfo.price.toString()}
-						onChangeText={text => changeFieldValue(text, 'price')}
-					/>
-				</View>
+				<Input
+					label="Price"
+					keyboardType="decimal-pad"
+					returnKeyType="next"
+					value={productInfo.price.toString()}
+					changeValue={text => changeFieldValue(text, 'price')}
+				/>
 			)}
-
-			<View style={styles.inputBox}>
-				<Text style={styles.label}>Description:</Text>
-				<TextInput
-					style={styles.input}
-					autoFocus={false}
-					value={productInfo.description}
-					onChangeText={text => changeFieldValue(text, 'description')}
-				/>
-			</View>
-			<View style={styles.inputBox}>
-				<Text style={styles.label}>Image Url:</Text>
-				<TextInput
-					style={styles.input}
-					autoFocus={false}
-					value={productInfo.imageUrl}
-					onChangeText={text => changeFieldValue(text, 'imageUrl')}
-				/>
-			</View>
+			<Input
+				label="Description"
+				keyboardType="default"
+				returnKeyType="next"
+				multiline
+				numberOfLines={3}
+				value={productInfo.description}
+				changeValue={text => changeFieldValue(text, 'description')}
+			/>
 		</ScrollView>
 	);
 };
@@ -149,20 +192,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		margin: 20,
 		justifyContent: 'flex-start'
-	},
-	inputBox: {
-		marginBottom: 12
-	},
-	label: {
-		fontFamily: 'open-sans',
-		marginVertical: 8,
-		marginRight: 5
-	},
-	input: {
-		paddingHorizontal: 10,
-		paddingVertical: 2,
-		borderColor: '#ccc',
-		borderBottomWidth: 2
 	}
 });
 
