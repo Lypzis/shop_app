@@ -1,12 +1,15 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 const INPUT_CHANGE = 'INPUT_CHANGE';
+const INPUT_BLUR = 'INPUT_BLUR';
 
 const inputReducer = (state, action) => {
 	switch (action.type) {
 		case INPUT_CHANGE:
-			return;
+			return { ...state, value: action.value, isValid: action.isValid };
+		case INPUT_BLUR:
+			return { ...state, touched: true };
 		default:
 			return state;
 	}
@@ -18,6 +21,18 @@ const Input = props => {
 		isValid: props.initiallyValid,
 		touched: false
 	});
+
+	//const { onInputChange } = props;
+
+	// useEffect(() => {
+	// 	if (inputState.touched)
+	// 		// only fire if touched is true, instead of in every keystroke
+	// 		onInputChange(inputState.value, inputState.isValid); // forwards my input state, which contains the properties of this input
+	// }, [inputState, onInputChange]);
+
+	const lostFocusHandler = () => {
+		dispatch({ type: INPUT_BLUR });
+	};
 
 	const textChangeHandler = text => {
 		const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -48,11 +63,12 @@ const Input = props => {
 				{...props}
 				style={styles.input}
 				value={props.value}
-				onChangeText={textChangeHandler} //props.changeValue
+				onChangeText={props.changeValue} // //textChangeHandler
+				onBlur={lostFocusHandler}
 			/>
 		</View>
 
-		// perhaps show an specific error here in case of invalidity. props.errorTexts
+		// perhaps show an specific error here in case of invalidity and touched. props.errorTexts
 	);
 };
 

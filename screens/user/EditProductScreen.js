@@ -15,6 +15,8 @@ import Product from '../../models/product';
 import { addUserProduct, editUserProduct } from '../../store/actions/products';
 import Input from '../../components/UI/Input';
 
+/** MISSION: try to use useReducer here and apply the validations from the video */
+
 const EditProductScreen = props => {
 	// the owner and item id are hardcorded just for the moment,
 	// for science you know :D
