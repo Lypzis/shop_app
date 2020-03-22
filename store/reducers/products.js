@@ -1,13 +1,13 @@
-import PRODUCTS from "../../data/dummy-data";
+import PRODUCTS from '../../data/dummy-data';
 import {
 	ADD_USER_PRODUCT,
 	EDIT_USER_PRODUCT,
 	DELETE_PRODUCT
-} from "../actions/products";
+} from '../actions/products';
 
 const initialState = {
 	availableProducts: PRODUCTS,
-	userProducts: PRODUCTS.filter(prod => prod.ownerId === "u1") // this obviously hard coded for now
+	userProducts: PRODUCTS.filter(prod => prod.ownerId === 'u1') // this obviously hard coded for now
 };
 
 const addUserProduct = (state, product) => {

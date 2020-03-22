@@ -3,12 +3,15 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const INPUT_BLUR = 'INPUT_BLUR';
+const INPUT_FOCUS = 'INPUT_FOCUS';
 
 const inputReducer = (state, action) => {
 	switch (action.type) {
 		case INPUT_CHANGE:
 			return { ...state, value: action.value, isValid: action.isValid };
 		case INPUT_BLUR:
+			return { ...state, touched: true };
+		case INPUT_FOCUS:
 			return { ...state, touched: true };
 		default:
 			return state;
@@ -22,17 +25,17 @@ const Input = props => {
 		touched: false
 	});
 
-	//const { onInputChange } = props;
+	const { onInputChange, id } = props;
 
-	// useEffect(() => {
-	// 	if (inputState.touched)
-	// 		// only fire if touched is true, instead of in every keystroke
-	// 		onInputChange(inputState.value, inputState.isValid); // forwards my input state, which contains the properties of this input
-	// }, [inputState, onInputChange]);
+	useEffect(() => {
+		if (inputState.touched)
+			// only fire if touched is true, instead of in every keystroke
+			onInputChange(id, inputState.value, inputState.isValid); // forwards my input state, which contains the properties of this input
+	}, [inputState, onInputChange, id]);
 
-	const lostFocusHandler = () => {
-		dispatch({ type: INPUT_BLUR });
-	};
+	const lostFocusHandler = () => dispatch({ type: INPUT_BLUR });
+
+	const onFocusHandler = () => dispatch({ type: INPUT_FOCUS });
 
 	const textChangeHandler = text => {
 		const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -62,13 +65,17 @@ const Input = props => {
 			<TextInput
 				{...props}
 				style={styles.input}
-				value={props.value}
-				onChangeText={props.changeValue} // //textChangeHandler
+				value={inputState.value}
+				onChangeText={textChangeHandler}
 				onBlur={lostFocusHandler}
+				onFocus={onFocusHandler}
 			/>
+			{!inputState.isValid && inputState.touched && (
+				<View style={styles.errorContainer}>
+					<Text style={styles.errorText}>{props.errorText}</Text>
+				</View>
+			)}
 		</View>
-
-		// perhaps show an specific error here in case of invalidity and touched. props.errorTexts
 	);
 };
 
@@ -86,7 +93,9 @@ const styles = StyleSheet.create({
 		paddingVertical: 2,
 		borderColor: '#ccc',
 		borderBottomWidth: 2
-	}
+	},
+	errorContainer: {},
+	errorText: {}
 });
 
 export default Input;

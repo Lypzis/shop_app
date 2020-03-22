@@ -1,59 +1,43 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import {
-	View,
-	Text,
-	StyleSheet,
-	TextInput,
-	ScrollView,
-	Alert
-} from 'react-native';
+import React, { useReducer, useCallback } from 'react';
+import { StyleSheet, ScrollView, Alert } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import HeaderButton from '../../components/UI/HeaderButton';
-import Product from '../../models/product';
 import { addUserProduct, editUserProduct } from '../../store/actions/products';
 import Input from '../../components/UI/Input';
 
-/** MISSION: try to use useReducer here and apply the validations from the video */
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
+
+const formReducer = (state, action) => {
+	if (action.type === FORM_INPUT_UPDATE) {
+		const updatedValues = {
+			...state.inputValues,
+			[action.input]: action.value
+		};
+		const updatedValidities = {
+			...state.inputValidities,
+			[action.input]: action.isValid
+		};
+		let updatedFormIsValid = true;
+
+		// if at least one input is invalid, the entire form is invalid
+		for (const key in updatedValidities) {
+			updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
+		}
+		return {
+			...state,
+			inputValidities: updatedValidities,
+			inputValues: updatedValues,
+			formIsValid: updatedFormIsValid
+		};
+	}
+
+	// in case of no action, which is unrealistic
+	return state;
+};
 
 const EditProductScreen = props => {
-	// the owner and item id are hardcorded just for the moment,
-	// for science you know :D
-	const [productInfo, setProductInfo] = useState(
-		new Product('f' + Math.random() * 10, 'u1', '', '', '', '')
-	);
-
-	const dispatch = useDispatch();
-
-	// Example of 'useReducer'
-	// const initialReducerState = {
-	// 	inputValues: {
-	// 		title: props.route.params ? props.route.params.title : '',
-	// 		imageUrl: props.route.params ? props.route.params.imageUrl : '',
-	// 		description: props.route.params ? props.route.params.description : '',
-	// 		price: ''
-	// 	},
-	// 	inputValidities: {
-	// 		title: props.route.params ? true : false,
-	// 		imageUrl: props.route.params ? true : false,
-	// 		description: props.route.params ? true : false,
-	// 		price: props.route.params ? true : false
-	// 	},
-	// 	formIsValid: props.route.params ? true : false
-	// };
-
-	// // example of useReducer
-	// // this is not related to react-redux
-	// const formReducer = (state, action) => {
-	// 	if (action.type === 'UPDATE') console.log('Update :DDD');
-	// };
-
-	// const [formState, dispatchFormState] = useReducer(
-	// 	formReducer,
-	// 	initialReducerState
-	// );
-
 	props.navigation.setOptions({
 		title: props.route.params !== undefined ? 'Edit Product' : 'Create Product',
 		headerRight: () => (
@@ -72,45 +56,37 @@ const EditProductScreen = props => {
 		)
 	});
 
-	useEffect(() => {
-		if (props.route.params !== undefined) {
-			const prodParams = props.route.params;
+	let prodId = '';
 
-			setProductInfo(
-				new Product(
-					prodParams.id,
-					prodParams.ownerId,
-					prodParams.title,
-					prodParams.imageUrl,
-					prodParams.description,
-					prodParams.price
-				)
-			);
-		}
-	}, []);
+	if (props.route.params !== undefined) prodId = props.route.params.id;
 
-	const changeFieldValue = (text, field) => {
-		const stateCopy = { ...productInfo };
+	const editedProduct = useSelector(state =>
+		state.products.userProducts.find(prod => prod.id === prodId)
+	);
 
-		switch (field) {
-			case 'title':
-				stateCopy.title = text;
-				break;
-			case 'price':
-				stateCopy.price = text;
-				break;
-			case 'description':
-				stateCopy.description = text;
-				break;
-			case 'imageUrl':
-				stateCopy.imageUrl = text;
-				break;
-			default:
-				return;
-		}
+	const dispatch = useDispatch();
 
-		return setProductInfo(stateCopy);
+	const initialState = {
+		id: editedProduct ? editedProduct.id : 'f' + Math.random() * 10,
+		// the owner and item id are hardcorded just for the moment,
+		// for science you know :D
+		owner: 'u1',
+		inputValues: {
+			title: editedProduct ? editedProduct.title : '',
+			imageUrl: editedProduct ? editedProduct.imageUrl : '',
+			description: editedProduct ? editedProduct.description : '',
+			price: editedProduct ? editedProduct.price : ''
+		},
+		inputValidities: {
+			title: editedProduct ? true : false,
+			imageUrl: editedProduct ? true : false,
+			description: editedProduct ? true : false,
+			price: editedProduct ? true : false
+		},
+		formIsValid: editedProduct ? true : false
 	};
+
+	const [formState, dispatchFormState] = useReducer(formReducer, initialState);
 
 	const showAlert = () => {
 		Alert.alert(
@@ -120,70 +96,105 @@ const EditProductScreen = props => {
 		);
 	};
 
-	const edit = () => {
-		// example purposes
-		//dispatchFormState({ type: 'UPDATE', value: productInfo, ... });
+	// text is by default always received as last argument
+	// by an onChangeText, wheter explicit or not
+	const inputChangeHandler = useCallback(
+		(inputIdentifier, inputValue, inputValidity) => {
+			dispatchFormState({
+				type: FORM_INPUT_UPDATE,
+				value: inputValue,
+				isValid: inputValidity,
+				input: inputIdentifier
+			});
+		},
+		[dispatchFormState]
+	); // with use of useCallBack, this function will never rebuild, because it is unecessary anyway.
 
-		if (checkProductInfo()) {
-			dispatch(editUserProduct(productInfo));
+	const edit = () => {
+		//if form is valid
+		if (formState.formIsValid) {
+			dispatch(
+				editUserProduct({
+					id: formState.id,
+					owner: formState.owner,
+					...formState.inputValues
+				})
+			);
 			props.navigation.replace('MyProductsScreen');
 		} else showAlert();
 	};
 
 	const save = () => {
-		if (checkProductInfo()) {
-			dispatch(addUserProduct(productInfo));
-
+		//if form is valid
+		if (formState.formIsValid) {
+			dispatch(
+				addUserProduct({
+					id: formState.id,
+					owner: formState.owner,
+					...formState.inputValues
+				})
+			);
 			props.navigation.replace('MyProductsScreen');
 		} else showAlert();
-	};
-
-	const checkProductInfo = () => {
-		if (productInfo.description.trim() === '') return false;
-		if (productInfo.imageUrl.trim() === '') return false;
-		if (productInfo.price.toString().trim() === '') return false;
-		if (productInfo.title.trim() === '') return false;
-
-		return true;
 	};
 
 	return (
 		<ScrollView contentContainerStyle={styles.screen}>
 			<Input
+				id="title"
+				editMode={editedProduct ? true : false}
 				autoFocus={false}
 				keyboardType="default"
 				autoCapitalize="sentences"
 				autoCorrect
 				returnKeyType="next" // how the 'submit' button is presented
-				onEndEditing={() => console.log('Finished')}
-				onSubmitEditing={() => console.log('Submitted')}
 				label="Title"
-				value={productInfo.title}
-				changeValue={text => changeFieldValue(text, 'title')}
+				errorText="Please input a valid title."
+				value={formState.inputValues.title}
+				initiallyValid={!editedProduct}
+				initialValue={editedProduct ? editedProduct.title : ''}
+				initiallyValid={!!editedProduct}
+				required
+				onInputChange={inputChangeHandler} // binding was causing too much rerendering
 			/>
 			<Input
+				id="imageUrl"
+				editMode={editedProduct ? true : false}
 				label="Image Url"
+				errorText="Please input a valid image url."
 				keyboardType="default"
-				value={productInfo.imageUrl}
-				changeValue={text => changeFieldValue(text, 'imageUrl')}
+				initialValue={editedProduct ? editedProduct.imageUrl : ''}
+				returnKeyType="next"
+				initiallyValid={!!editedProduct}
+				required
+				onInputChange={inputChangeHandler}
 			/>
-			{props.route.params === undefined && (
+			{!editedProduct && (
 				<Input
+					id="price"
 					label="Price"
+					errorText="Please input a valid price"
 					keyboardType="decimal-pad"
 					returnKeyType="next"
-					value={productInfo.price.toString()}
-					changeValue={text => changeFieldValue(text, 'price')}
+					required
+					min={0.05}
+					onInputChange={inputChangeHandler}
 				/>
 			)}
 			<Input
+				id="description"
+				editMode={editedProduct ? true : false}
 				label="Description"
+				errorText="Please input a valid description."
 				keyboardType="default"
-				returnKeyType="next"
+				autoCorrect
 				multiline
+				initialValue={editedProduct ? editedProduct.description : ''}
 				numberOfLines={3}
-				value={productInfo.description}
-				changeValue={text => changeFieldValue(text, 'description')}
+				initiallyValid={!!editedProduct}
+				required
+				minLength={5}
+				onInputChange={inputChangeHandler}
 			/>
 		</ScrollView>
 	);

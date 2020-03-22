@@ -1,7 +1,7 @@
-export const ADD_USER_PRODUCT = "ADD_USER_PRODUCT";
-export const ADD_AVAILABLE_PRODUCT = "ADD_AVAILABLE_PRODUCT";
-export const EDIT_USER_PRODUCT = "EDIT_USER_PRODUCT";
-export const DELETE_PRODUCT = "DELETE_PRODUCT";
+export const ADD_USER_PRODUCT = 'ADD_USER_PRODUCT';
+export const ADD_AVAILABLE_PRODUCT = 'ADD_AVAILABLE_PRODUCT';
+export const EDIT_USER_PRODUCT = 'EDIT_USER_PRODUCT';
+export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 
 // this will need to know which user is doing the action later on
 export const addUserProduct = product => {
