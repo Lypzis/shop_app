@@ -94,8 +94,14 @@ const styles = StyleSheet.create({
 		borderColor: '#ccc',
 		borderBottomWidth: 2
 	},
-	errorContainer: {},
-	errorText: {}
+	errorContainer: {
+		marginVertical: 5
+	},
+	errorText: {
+		fontFamily: 'open-sans',
+		color: 'red',
+		fontSize: 13
+	}
 });
 
 export default Input;

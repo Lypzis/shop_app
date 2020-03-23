@@ -1,5 +1,10 @@
 import React, { useReducer, useCallback } from 'react';
-import { StyleSheet, ScrollView, Alert } from 'react-native';
+import {
+	StyleSheet,
+	ScrollView,
+	Alert,
+	KeyboardAvoidingView
+} from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -139,70 +144,77 @@ const EditProductScreen = props => {
 	};
 
 	return (
-		<ScrollView contentContainerStyle={styles.screen}>
-			<Input
-				id="title"
-				editMode={editedProduct ? true : false}
-				autoFocus={false}
-				keyboardType="default"
-				autoCapitalize="sentences"
-				autoCorrect
-				returnKeyType="next" // how the 'submit' button is presented
-				label="Title"
-				errorText="Please input a valid title."
-				value={formState.inputValues.title}
-				initiallyValid={!editedProduct}
-				initialValue={editedProduct ? editedProduct.title : ''}
-				initiallyValid={!!editedProduct}
-				required
-				onInputChange={inputChangeHandler} // binding was causing too much rerendering
-			/>
-			<Input
-				id="imageUrl"
-				editMode={editedProduct ? true : false}
-				label="Image Url"
-				errorText="Please input a valid image url."
-				keyboardType="default"
-				initialValue={editedProduct ? editedProduct.imageUrl : ''}
-				returnKeyType="next"
-				initiallyValid={!!editedProduct}
-				required
-				onInputChange={inputChangeHandler}
-			/>
-			{!editedProduct && (
+		// basic keyboardavoidingview setup,
+		// and scrollview can't have 'flex: 1' OK
+		<KeyboardAvoidingView
+			style={{ flex: 1 }}
+			behavior="padding"
+			keyboardVerticalOffset={100}
+		>
+			<ScrollView contentContainerStyle={styles.screen}>
 				<Input
-					id="price"
-					label="Price"
-					errorText="Please input a valid price"
-					keyboardType="decimal-pad"
-					returnKeyType="next"
+					id="title"
+					editMode={editedProduct ? true : false}
+					autoFocus={false}
+					keyboardType="default"
+					autoCapitalize="sentences"
+					autoCorrect
+					returnKeyType="next" // how the 'submit' button is presented
+					label="Title"
+					errorText="Please input a valid title."
+					value={formState.inputValues.title}
+					initiallyValid={!editedProduct}
+					initialValue={editedProduct ? editedProduct.title : ''}
+					initiallyValid={!!editedProduct}
 					required
-					min={0.05}
+					onInputChange={inputChangeHandler} // binding was causing too much rerendering
+				/>
+				<Input
+					id="imageUrl"
+					editMode={editedProduct ? true : false}
+					label="Image Url"
+					errorText="Please input a valid image url."
+					keyboardType="default"
+					initialValue={editedProduct ? editedProduct.imageUrl : ''}
+					returnKeyType="next"
+					initiallyValid={!!editedProduct}
+					required
 					onInputChange={inputChangeHandler}
 				/>
-			)}
-			<Input
-				id="description"
-				editMode={editedProduct ? true : false}
-				label="Description"
-				errorText="Please input a valid description."
-				keyboardType="default"
-				autoCorrect
-				multiline
-				initialValue={editedProduct ? editedProduct.description : ''}
-				numberOfLines={3}
-				initiallyValid={!!editedProduct}
-				required
-				minLength={5}
-				onInputChange={inputChangeHandler}
-			/>
-		</ScrollView>
+				{!editedProduct && (
+					<Input
+						id="price"
+						label="Price"
+						errorText="Please input a valid price"
+						keyboardType="decimal-pad"
+						returnKeyType="next"
+						required
+						min={0.05}
+						onInputChange={inputChangeHandler}
+					/>
+				)}
+				<Input
+					id="description"
+					editMode={editedProduct ? true : false}
+					label="Description"
+					errorText="Please input a valid description."
+					keyboardType="default"
+					autoCorrect
+					multiline
+					initialValue={editedProduct ? editedProduct.description : ''}
+					numberOfLines={3}
+					initiallyValid={!!editedProduct}
+					required
+					minLength={5}
+					onInputChange={inputChangeHandler}
+				/>
+			</ScrollView>
+		</KeyboardAvoidingView>
 	);
 };
 
 const styles = StyleSheet.create({
 	screen: {
-		flex: 1,
 		margin: 20,
 		justifyContent: 'flex-start'
 	}
