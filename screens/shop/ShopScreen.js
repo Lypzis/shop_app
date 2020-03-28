@@ -1,20 +1,43 @@
-import React from 'react';
-import { View, StyleSheet, FlatList, Platform } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import {
+	View,
+	StyleSheet,
+	FlatList,
+	Platform,
+	ActivityIndicator,
+	Text,
+	Button
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import ProductCard from '../../components/UI/ProductCard';
 import HeaderButton from '../../components/UI/HeaderButton';
 import { addProductToCart } from '../../store/actions/cart';
+import { fetchProducts } from '../../store/actions/products';
 import Colors from '../../constants/Colors';
 
 const ShopScreen = props => {
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState(null);
+
 	const shopProducts = useSelector(
-		state => state.products.availableProducts,
-		() => false
+		state => state.products.availableProducts
+		//() => false  NOTE: not necessary anymore, now with navigation listener
 	);
 
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		// If user is coming back to this screen(focus), run 'loadProducts'
+		const unsubscribe = props.navigation.addListener('focus', loadProducts);
+
+		return unsubscribe; // cleanup function, remember to ALWAYS use this after adding a listener
+	}, [loadProducts]);
+
+	useEffect(() => {
+		loadProducts();
+	}, [dispatch, loadProducts]);
 
 	props.navigation.setOptions({
 		headerLeft: () => (
@@ -43,6 +66,41 @@ const ShopScreen = props => {
 		dispatch(addProductToCart(product));
 	};
 
+	const loadProducts = useCallback(async () => {
+		console.log('LOAD PRODUCTS');
+		setError(null);
+		setIsLoading(true);
+		try {
+			await dispatch(fetchProducts());
+		} catch (err) {
+			setError(err.message);
+		}
+		setIsLoading(false);
+	}, [dispatch, setIsLoading, setError]); // remember, it will only rerun if on of these array's argument changes
+	// just like in useEffect
+
+	if (isLoading)
+		return (
+			<View style={styles.loading}>
+				<ActivityIndicator size="large" color={Colors.primary} />
+			</View>
+		);
+
+	if (!isLoading && shopProducts.length === 0)
+		return (
+			<View style={styles.loading}>
+				<Text>No products found. Maybe start adding some! D:</Text>
+			</View>
+		);
+
+	if (error)
+		return (
+			<View style={styles.loading}>
+				<Text>{error}</Text>
+				<Button title="Reload" onPress={loadProducts} color={Colors.primary} />
+			</View>
+		);
+
 	return (
 		<View style={styles.screen}>
 			<FlatList
@@ -69,6 +127,11 @@ const ShopScreen = props => {
 const styles = StyleSheet.create({
 	screen: {
 		width: '100%'
+	},
+	loading: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center'
 	}
 });
 
