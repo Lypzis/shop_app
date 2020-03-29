@@ -64,6 +64,8 @@ export const addUserProduct = product => {
 				})
 			});
 
+			if (!res.ok) throw new Error('Sorry, product could not be created.');
+
 			const resData = await res.json();
 
 			// with the addition of redux thunk, here a dispatch is returned now
@@ -86,15 +88,54 @@ export const addAvailableProduct = product => {
 
 // this will need to know which user is doing the action later on
 export const editUserProduct = product => {
-	return {
-		type: EDIT_USER_PRODUCT,
-		product: product
+	return async dispatch => {
+		const { imageUrl, title, description, id } = product;
+
+		try {
+			const res = await fetch(`${ApiEndPoint.api}/products/${id}.json`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					imageUrl,
+					title,
+					description
+				})
+			});
+
+			if (!res.ok) throw new Error('Sorry, product could not be updated.');
+
+			dispatch({
+				type: EDIT_USER_PRODUCT,
+				product: {
+					...product,
+					imageUrl: imageUrl,
+					title: title,
+					description: description
+				}
+			});
+		} catch (err) {
+			throw err;
+		}
 	};
 };
 
 export const deleteProduct = productId => {
-	return {
-		type: DELETE_PRODUCT,
-		productId: productId
+	return async dispatch => {
+		try {
+			const res = await fetch(`${ApiEndPoint.api}/products/${productId}.json`, {
+				method: 'DELETE'
+			});
+
+			if (!res.ok) throw new Error('Sorry, product could not be deleted.');
+
+			dispatch({
+				type: DELETE_PRODUCT,
+				productId: productId
+			});
+		} catch (err) {
+			throw err;
+		}
 	};
 };

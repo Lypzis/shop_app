@@ -16,6 +16,7 @@ import HeaderButton from '../../components/UI/HeaderButton';
 import { addProductToCart } from '../../store/actions/cart';
 import { fetchProducts } from '../../store/actions/products';
 import Colors from '../../constants/Colors';
+import Loading from '../../components/UI/Loading';
 
 const ShopScreen = props => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -67,7 +68,6 @@ const ShopScreen = props => {
 	};
 
 	const loadProducts = useCallback(async () => {
-		console.log('LOAD PRODUCTS');
 		setError(null);
 		setIsLoading(true);
 		try {
@@ -79,12 +79,7 @@ const ShopScreen = props => {
 	}, [dispatch, setIsLoading, setError]); // remember, it will only rerun if on of these array's argument changes
 	// just like in useEffect
 
-	if (isLoading)
-		return (
-			<View style={styles.loading}>
-				<ActivityIndicator size="large" color={Colors.primary} />
-			</View>
-		);
+	if (isLoading) return <Loading size="large" color={Colors.primary} />;
 
 	if (!isLoading && shopProducts.length === 0)
 		return (
@@ -127,11 +122,6 @@ const ShopScreen = props => {
 const styles = StyleSheet.create({
 	screen: {
 		width: '100%'
-	},
-	loading: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center'
 	}
 });
 

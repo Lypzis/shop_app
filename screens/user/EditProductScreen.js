@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback } from 'react';
+import React, { useReducer, useCallback, useState } from 'react';
 import {
 	StyleSheet,
 	ScrollView,
@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import HeaderButton from '../../components/UI/HeaderButton';
 import { addUserProduct, editUserProduct } from '../../store/actions/products';
 import Input from '../../components/UI/Input';
+import Loading from '../../components/UI/Loading';
+import Colors from '../../constants/Colors';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
@@ -43,6 +45,9 @@ const formReducer = (state, action) => {
 };
 
 const EditProductScreen = props => {
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState();
+
 	props.navigation.setOptions({
 		title: props.route.params !== undefined ? 'Edit Product' : 'Create Product',
 		headerRight: () => (
@@ -115,33 +120,56 @@ const EditProductScreen = props => {
 		[dispatchFormState]
 	); // with use of useCallBack, this function will never rebuild, because it is unecessary anyway.
 
-	const edit = () => {
-		//if form is valid
-		if (formState.formIsValid) {
-			dispatch(
-				editUserProduct({
-					id: formState.id,
-					owner: formState.owner,
-					...formState.inputValues
-				})
-			);
-			props.navigation.replace('MyProductsScreen');
-		} else showAlert();
+	const edit = async () => {
+		setIsLoading(true);
+		setError(null);
+		try {
+			//if form is valid
+			if (formState.formIsValid) {
+				await dispatch(
+					editUserProduct({
+						id: formState.id,
+						owner: formState.owner,
+						...formState.inputValues
+					})
+				);
+
+				props.navigation.replace('MyProductsScreen');
+			} else showAlert();
+		} catch (err) {
+			setError(err.message);
+		}
+		setIsLoading(false);
 	};
 
-	const save = () => {
-		//if form is valid
-		if (formState.formIsValid) {
-			dispatch(
-				addUserProduct({
-					id: formState.id,
-					owner: formState.owner,
-					...formState.inputValues
-				})
-			);
-			props.navigation.replace('MyProductsScreen');
-		} else showAlert();
+	const save = async () => {
+		setIsLoading(true);
+		setError(null);
+		try {
+			//if form is valid
+			if (formState.formIsValid) {
+				await dispatch(
+					addUserProduct({
+						id: formState.id,
+						owner: formState.owner,
+						...formState.inputValues
+					})
+				);
+
+				props.navigation.replace('MyProductsScreen');
+			} else showAlert();
+		} catch (err) {
+			setError(err.message);
+		}
+		setIsLoading(false);
 	};
+
+	if (isLoading) return <Loading size="large" color={Colors.primary} />;
+
+	if (error)
+		Alert.alert('Error', error, [
+			{ text: 'Ok', style: 'destructive', onPress: () => setError(null) }
+		]);
 
 	return (
 		// basic keyboardavoidingview setup,

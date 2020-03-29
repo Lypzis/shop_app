@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Platform, FlatList, Alert } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,12 +7,13 @@ import HeaderButton from '../../components/UI/HeaderButton';
 import ProductCard from '../../components/UI/ProductCard';
 import Colors from '../../constants/Colors';
 import { deleteProduct } from '../../store/actions/products';
+import Loading from '../../components/UI/Loading';
 
 const UserProductsScreen = props => {
-	const userProducts = useSelector(
-		state => state.products.userProducts,
-		() => false
-	);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState();
+
+	const userProducts = useSelector(state => state.products.userProducts);
 
 	const dispatch = useDispatch();
 
@@ -39,6 +40,17 @@ const UserProductsScreen = props => {
 		)
 	});
 
+	const deleteUserProduct = async id => {
+		setIsLoading(true);
+		setError(null);
+		try {
+			await dispatch(deleteProduct(id));
+		} catch (err) {
+			setError(err.message);
+		}
+		setIsLoading(false);
+	};
+
 	const deleteMyProduct = id => {
 		// A simple alert, for deletetion confirmation
 		Alert.alert(
@@ -49,11 +61,18 @@ const UserProductsScreen = props => {
 				{
 					text: 'Yes',
 					style: 'destructive',
-					onPress: () => dispatch(deleteProduct(id))
+					onPress: () => deleteUserProduct(id)
 				}
 			]
 		);
 	};
+
+	if (isLoading) return <Loading size="large" color={Colors.primary} />;
+
+	if (error)
+		Alert.alert('Error', error, [
+			{ text: 'Ok', style: 'destructive', onPress: () => setError(null) }
+		]);
 
 	return (
 		<View style={styles.screen}>
