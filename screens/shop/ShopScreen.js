@@ -20,6 +20,7 @@ import Loading from '../../components/UI/Loading';
 
 const ShopScreen = props => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [error, setError] = useState(null);
 
 	const shopProducts = useSelector(
@@ -37,8 +38,9 @@ const ShopScreen = props => {
 	}, [loadProducts]);
 
 	useEffect(() => {
-		loadProducts();
-	}, [dispatch, loadProducts]);
+		setIsLoading(true);
+		loadProducts().then(() => setIsLoading(false));
+	}, [loadProducts]);
 
 	props.navigation.setOptions({
 		headerLeft: () => (
@@ -69,13 +71,13 @@ const ShopScreen = props => {
 
 	const loadProducts = useCallback(async () => {
 		setError(null);
-		setIsLoading(true);
+		setIsRefreshing(true);
 		try {
 			await dispatch(fetchProducts());
 		} catch (err) {
 			setError(err.message);
 		}
-		setIsLoading(false);
+		setIsRefreshing(false);
 	}, [dispatch, setIsLoading, setError]); // remember, it will only rerun if on of these array's argument changes
 	// just like in useEffect
 
@@ -99,6 +101,9 @@ const ShopScreen = props => {
 	return (
 		<View style={styles.screen}>
 			<FlatList
+				// onRefresh and refreshing are required for the "pull to refresh :D"
+				onRefresh={loadProducts}
+				refreshing={isRefreshing}
 				style={{ width: '100%' }}
 				data={shopProducts}
 				renderItem={itemData => (

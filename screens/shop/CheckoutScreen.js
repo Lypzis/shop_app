@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Button } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, Button, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import CartItem from '../../components/shop/CartItem';
@@ -10,8 +10,12 @@ import {
 } from '../../store/actions/cart';
 import { addOrder } from '../../store/actions/orders';
 import Colors from '../../constants/Colors';
+import Loading from '../../components/UI/Loading';
 
 const CheckoutScreen = props => {
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState();
+
 	useEffect(() => {
 		calculateTotal();
 	}, []);
@@ -38,7 +42,7 @@ const CheckoutScreen = props => {
 		dispatch(removeAllProducts());
 	};
 
-	const makeOrder = () => {
+	const makeOrder = async () => {
 		const date = new Date();
 
 		let hours = date.getHours();
@@ -69,8 +73,24 @@ const CheckoutScreen = props => {
 			id: new Date().toISOString()
 		};
 
-		dispatch(addOrder(order));
+		setIsLoading(true);
+		setError(null);
+		try {
+			await dispatch(addOrder(order));
+			eraseCartItems();
+			props.navigation.navigate('ShopScreen');
+		} catch (err) {
+			setError(err.message);
+		}
+		setIsLoading(false);
 	};
+
+	if (error)
+		Alert.alert('Error', error, [
+			{ text: 'Ok', style: 'destructive', onPress: () => setError(null) }
+		]);
+
+	if (isLoading) return <Loading size="large" color={Colors.primary} />;
 
 	return (
 		// order button
@@ -97,15 +117,7 @@ const CheckoutScreen = props => {
 						</Text>
 
 						<View style={styles.orderButton}>
-							<Button
-								color={Colors.secondary}
-								title="Order"
-								onPress={() => {
-									makeOrder();
-									eraseCartItems();
-									props.navigation.navigate('ShopScreen');
-								}}
-							/>
+							<Button color={Colors.secondary} title="Order" onPress={makeOrder} />
 						</View>
 					</View>
 				</View>
