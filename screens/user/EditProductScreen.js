@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback, useState } from 'react';
+import React, { useReducer, useCallback, useState, useEffect } from 'react';
 import {
 	StyleSheet,
 	ScrollView,
@@ -166,10 +166,12 @@ const EditProductScreen = props => {
 
 	if (isLoading) return <Loading size="large" color={Colors.primary} />;
 
-	if (error)
-		Alert.alert('Error', error, [
-			{ text: 'Ok', style: 'destructive', onPress: () => setError(null) }
-		]);
+	useEffect(() => {
+		if (error)
+			Alert.alert('Error', error, [
+				{ text: 'Ok', style: 'destructive', onPress: () => setError(null) }
+			]);
+	}, [error]);
 
 	return (
 		// basic keyboardavoidingview setup,

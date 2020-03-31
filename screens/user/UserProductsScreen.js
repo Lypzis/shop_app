@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Platform, FlatList, Alert } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -69,10 +69,12 @@ const UserProductsScreen = props => {
 
 	if (isLoading) return <Loading size="large" color={Colors.primary} />;
 
-	if (error)
-		Alert.alert('Error', error, [
-			{ text: 'Ok', style: 'destructive', onPress: () => setError(null) }
-		]);
+	useEffect(() => {
+		if (error)
+			Alert.alert('Error', error, [
+				{ text: 'Ok', style: 'destructive', onPress: () => setError(null) }
+			]);
+	}, [error]);
 
 	return (
 		<View style={styles.screen}>

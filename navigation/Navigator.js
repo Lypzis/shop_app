@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { useSelector } from 'react-redux';
 
 import ProductsNavigator from './ProductsNavigator';
 import OrdersNavigator from './OrdersNavigator';
@@ -12,11 +13,16 @@ import LoginNavigator from './LoginNavigator';
 
 import Colors from '../constants/Colors';
 
-let authenticated = false;
+let authenticated = null; /// get token from reducer
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigatorShop = props => {
+	authenticated = useSelector(
+		state => state.auth.idToken,
+		() => false
+	);
+
 	return (
 		<Drawer.Navigator drawerContentOptions={{ activeTintColor: Colors.primary }}>
 			{!authenticated ? (

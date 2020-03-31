@@ -11,13 +11,15 @@ import Navigator from './navigation/Navigator';
 import productsReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
 import orderReducer from './store/reducers/orders';
+import authReducer from './store/reducers/auth';
 
 enableScreens();
 
 const rootReducer = combineReducers({
 	products: productsReducer,
 	cart: cartReducer,
-	orders: orderReducer
+	orders: orderReducer,
+	auth: authReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk)); // redux-thunk enables asynchronous code in the redux store

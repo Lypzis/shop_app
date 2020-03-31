@@ -85,10 +85,12 @@ const CheckoutScreen = props => {
 		setIsLoading(false);
 	};
 
-	if (error)
-		Alert.alert('Error', error, [
-			{ text: 'Ok', style: 'destructive', onPress: () => setError(null) }
-		]);
+	useEffect(() => {
+		if (error)
+			Alert.alert('Error', error, [
+				{ text: 'Ok', style: 'destructive', onPress: () => setError(null) }
+			]);
+	}, [error]);
 
 	if (isLoading) return <Loading size="large" color={Colors.primary} />;
 
