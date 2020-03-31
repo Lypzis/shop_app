@@ -4,9 +4,11 @@ export const ADD_ORDER = 'ADD_ORDER';
 export const SET_ORDERS = 'SET_ORDER';
 
 export const fetchOrders = () => {
-	return async dispatch => {
+	return async (dispatch, getState) => {
 		try {
-			const res = await fetch(`${ApiEndPoint.api}/orders/u1.json`);
+			// auth token
+			const token = getState().auth.idToken;
+			const res = await fetch(`${ApiEndPoint.api}/orders/u1.json?auth=${token}`);
 
 			if (!res.ok) throw new Error('Something went wrong!');
 
@@ -34,11 +36,13 @@ export const fetchOrders = () => {
 };
 
 export const addOrder = order => {
-	return async dispatch => {
+	return async (dispatch, getState) => {
 		const { cartItems, date, total } = order;
 
 		try {
-			const res = await fetch(`${ApiEndPoint.api}/orders/u1.json`, {
+			// auth token
+			const token = getState().auth.idToken;
+			const res = await fetch(`${ApiEndPoint.api}/orders/u1.json?auth=${token}`, {
 				// change for a real user's id here later on
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },

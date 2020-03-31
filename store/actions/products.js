@@ -8,10 +8,13 @@ export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 export const fetchProducts = () => {
-	return async dispatch => {
+	return async (dispatch, getState) => {
+		// the getState is necessary here because the needed token is in a reducer
 		try {
+			// auth token
+			const token = getState().auth.idToken;
 			// get request
-			const res = await fetch(`${ApiEndPoint.api}/products.json`);
+			const res = await fetch(`${ApiEndPoint.api}/products.json?auth=${token}`);
 
 			if (!res.ok) throw new Error('Something went wrong!');
 
@@ -46,12 +49,16 @@ export const fetchProducts = () => {
 
 // this will need to know which user is doing the action later on
 export const addUserProduct = product => {
-	return async dispatch => {
+	return async (dispatch, getState) => {
+		// the getState is necessary here because the needed token is in a reducer
+
 		const { imageUrl, price, title, description } = product;
 
 		// any async code here
 		try {
-			const res = await fetch(`${ApiEndPoint.api}/products.json`, {
+			// auth token
+			const token = getState().auth.idToken;
+			const res = await fetch(`${ApiEndPoint.api}/products.json?auth=${token}`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -88,21 +95,26 @@ export const addAvailableProduct = product => {
 
 // this will need to know which user is doing the action later on
 export const editUserProduct = product => {
-	return async dispatch => {
+	return async (dispatch, getState) => {
 		const { imageUrl, title, description, id } = product;
 
 		try {
-			const res = await fetch(`${ApiEndPoint.api}/products/${id}.json`, {
-				method: 'PATCH',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					imageUrl,
-					title,
-					description
-				})
-			});
+			// auth token
+			const token = getState().auth.idToken;
+			const res = await fetch(
+				`${ApiEndPoint.api}/products/${id}.json?auth=${token}`,
+				{
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						imageUrl,
+						title,
+						description
+					})
+				}
+			);
 
 			if (!res.ok) throw new Error('Sorry, product could not be updated.');
 
@@ -122,11 +134,16 @@ export const editUserProduct = product => {
 };
 
 export const deleteProduct = productId => {
-	return async dispatch => {
+	return async (dispatch, getState) => {
 		try {
-			const res = await fetch(`${ApiEndPoint.api}/products/${productId}.json`, {
-				method: 'DELETE'
-			});
+			// auth token
+			const token = getState().auth.idToken;
+			const res = await fetch(
+				`${ApiEndPoint.api}/products/${productId}.json?auth=${token}`,
+				{
+					method: 'DELETE'
+				}
+			);
 
 			if (!res.ok) throw new Error('Sorry, product could not be deleted.');
 
