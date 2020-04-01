@@ -77,10 +77,6 @@ const EditProductScreen = props => {
 	const dispatch = useDispatch();
 
 	const initialState = {
-		id: editedProduct ? editedProduct.id : 'f' + Math.random() * 10,
-		// the owner and item id are hardcorded just for the moment,
-		// for science you know :D
-		owner: 'u1',
 		inputValues: {
 			title: editedProduct ? editedProduct.title : '',
 			imageUrl: editedProduct ? editedProduct.imageUrl : '',
@@ -128,8 +124,7 @@ const EditProductScreen = props => {
 			if (formState.formIsValid) {
 				await dispatch(
 					editUserProduct({
-						id: formState.id,
-						owner: formState.owner,
+						id: editedProduct.id,
 						...formState.inputValues
 					})
 				);
@@ -150,8 +145,6 @@ const EditProductScreen = props => {
 			if (formState.formIsValid) {
 				await dispatch(
 					addUserProduct({
-						id: formState.id,
-						owner: formState.owner,
 						...formState.inputValues
 					})
 				);
@@ -164,14 +157,14 @@ const EditProductScreen = props => {
 		setIsLoading(false);
 	};
 
-	if (isLoading) return <Loading size="large" color={Colors.primary} />;
-
 	useEffect(() => {
 		if (error)
 			Alert.alert('Error', error, [
 				{ text: 'Ok', style: 'destructive', onPress: () => setError(null) }
 			]);
 	}, [error]);
+
+	if (isLoading) return <Loading size="large" color={Colors.primary} />;
 
 	return (
 		// basic keyboardavoidingview setup,

@@ -1,4 +1,3 @@
-import PRODUCTS from '../../data/dummy-data';
 import {
 	ADD_USER_PRODUCT,
 	EDIT_USER_PRODUCT,
@@ -7,8 +6,8 @@ import {
 } from '../actions/products';
 
 const initialState = {
-	availableProducts: PRODUCTS,
-	userProducts: PRODUCTS.filter(prod => prod.ownerId === 'u1') // this obviously hard coded for now
+	availableProducts: [],
+	userProducts: []
 };
 
 const addUserProduct = (state, product) => {
@@ -57,17 +56,17 @@ const deleteProduct = (state, id) => {
 	};
 };
 
-const setProducts = products => {
+const setProducts = (products, userProducts) => {
 	return {
 		availableProducts: products,
-		userProducts: products.filter(product => product.ownerId === 'u1')
+		userProducts: userProducts
 	};
 };
 
 const productsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_PRODUCTS:
-			return setProducts(action.products);
+			return setProducts(action.products, action.userProducts);
 		case ADD_USER_PRODUCT:
 			return addUserProduct(state, action.product);
 		case EDIT_USER_PRODUCT:

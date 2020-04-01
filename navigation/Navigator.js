@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+//import AsyncStorage from '@react-native-community/async-storage'; // Needs Ejection :D
+import { useSelector, useDispatch } from 'react-redux';
 import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { useSelector } from 'react-redux';
 
 import ProductsNavigator from './ProductsNavigator';
 import OrdersNavigator from './OrdersNavigator';
@@ -13,15 +14,59 @@ import LoginNavigator from './LoginNavigator';
 
 import Colors from '../constants/Colors';
 
-let authenticated = null; /// get token from reducer
-
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigatorShop = props => {
-	authenticated = useSelector(
+	// get token from reducer
+	let authenticated = useSelector(
 		state => state.auth.idToken,
 		() => false
 	);
+
+	// // will only work after ejection, AsyncStorage needs linking
+	// const [isLoading, setIsLoading] = useState(false);
+	// const [authenticated, setAuthenticated] = useState(false);
+
+	// useEffect(() => {
+	// 	tryLogin();
+	// }, [tryLogin]);
+
+	// const tryLogin = useCallback(async () => {
+	// 	setIsLoading(true);
+	// 	try {
+	// 		const userData = await AsyncStorage.getItem('userData');
+
+	// 		// if userData does not exist
+	// 		if (!userData) {
+	// 			setIsLoading(false);
+	// 			setAuthenticated(false);
+	// 			return;
+	// 		}
+
+	// 		//else
+	// 		const transformedData = JSON.parse(userData);
+
+	// 		const { token, userId, expiryDate } = transformedData;
+
+	// 		const expirationDate = new Date(expiryDate);
+
+	// 		// verify if token is still valid
+	// 		if (expirationDate <= new Date() || !token || !userId) {
+	// 			setIsLoading(false);
+	// 			setAuthenticated(false);
+	// 			return;
+	// 		}
+
+	// 		setIsLoading(false);
+	// 		setAuthenticated(true);
+	// 		and log the user in with useDispatch authenticate in auth.js
+	// 	} catch (err) {
+	// 		setIsLoading(false);
+	// 		throw err;
+	// 	}
+	// }, [setAuthenticated]);
+
+	// if (isLoading) return <Loading size="large" color={Colors.primary} />;
 
 	return (
 		<Drawer.Navigator drawerContentOptions={{ activeTintColor: Colors.primary }}>

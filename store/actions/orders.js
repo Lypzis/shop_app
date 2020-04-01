@@ -8,7 +8,10 @@ export const fetchOrders = () => {
 		try {
 			// auth token
 			const token = getState().auth.idToken;
-			const res = await fetch(`${ApiEndPoint.api}/orders/u1.json?auth=${token}`);
+			const id = getState().auth.userId;
+			const res = await fetch(
+				`${ApiEndPoint.api}/orders/${id}.json?auth=${token}`
+			);
 
 			if (!res.ok) throw new Error('Something went wrong!');
 
@@ -42,16 +45,20 @@ export const addOrder = order => {
 		try {
 			// auth token
 			const token = getState().auth.idToken;
-			const res = await fetch(`${ApiEndPoint.api}/orders/u1.json?auth=${token}`, {
-				// change for a real user's id here later on
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					cartItems: cartItems,
-					date: date,
-					total: total
-				})
-			});
+			const id = getState().auth.userId;
+			const res = await fetch(
+				`${ApiEndPoint.api}/orders/${id}.json?auth=${token}`,
+				{
+					// change for a real user's id here later on
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						cartItems: cartItems,
+						date: date,
+						total: total
+					})
+				}
+			);
 
 			if (!res.ok) throw new Error('Sorry, could not send the order.');
 

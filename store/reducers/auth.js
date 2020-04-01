@@ -1,4 +1,4 @@
-import { SIGNIN, SIGNUP } from '../actions/auth';
+import { AUTHENTICATE } from '../actions/auth';
 
 const initialState = {
 	idToken: null,
@@ -7,12 +7,7 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case SIGNIN:
-			return {
-				idToken: action.idToken,
-				userId: action.userId
-			};
-		case SIGNUP:
+		case AUTHENTICATE:
 			return {
 				idToken: action.idToken,
 				userId: action.userId

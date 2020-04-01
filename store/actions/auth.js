@@ -1,7 +1,13 @@
+//import AsyncStorage from '@react-native-community/async-storage'; needs ejection :D
 import ApiEndPoint from '../../constants/ApiEndPoint';
 
 export const SIGNUP = 'SIGNUP';
 export const SIGNIN = 'SIGNIN';
+export const AUTHENTICATE = 'AUTHENTICATE';
+
+export const authenticate = (userId, token) => {
+	return { type: AUTHENTICATE, userId: userId, idToken: token };
+};
 
 export const signup = (email, password) => {
 	return async dispatch => {
@@ -31,11 +37,11 @@ export const signup = (email, password) => {
 				throw new Error(message);
 			}
 
-			dispatch({
-				type: SIGNUP,
-				idToken: resData.idToken,
-				userId: resData.localId
-			});
+			dispatch(authenticate(resData.localId, resData.idToken));
+			const expirationDate = new Date(
+				new Date().getTime() + parseInt(resData.expiresIn) * 1000
+			); //* 1000 to turn seconds into miliseconds
+			saveDataToStorage(resData.idToken, resData.localId, expirationDate);
 		} catch (err) {
 			throw err;
 		}
@@ -73,13 +79,28 @@ export const signin = (email, password) => {
 				throw new Error(message);
 			}
 
-			dispatch({
-				type: SIGNIN,
-				idToken: resData.idToken,
-				userId: resData.localId
-			});
+			dispatch(authenticate(resData.localId, resData.idToken));
+			const expirationDate = new Date(
+				new Date().getTime() + parseInt(resData.expiresIn) * 1000
+			); //* 1000 to turn seconds into miliseconds
+			saveDataToStorage(resData.idToken, resData.localId, expirationDate);
 		} catch (err) {
 			throw err;
 		}
 	};
+};
+
+const saveDataToStorage = async (token, userId, expirationDate) => {
+	try {
+		await AsyncStorage.setItem(
+			'userData',
+			JSON.stringify({
+				token: token,
+				userId: userId,
+				expiryDate: expirationDate.toISOString()
+			})
+		);
+	} catch (err) {
+		throw err;
+	}
 };

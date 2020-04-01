@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Platform, FlatList, Alert } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	Platform,
+	FlatList,
+	Alert,
+	Text
+} from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -67,8 +74,6 @@ const UserProductsScreen = props => {
 		);
 	};
 
-	if (isLoading) return <Loading size="large" color={Colors.primary} />;
-
 	useEffect(() => {
 		if (error)
 			Alert.alert('Error', error, [
@@ -76,25 +81,31 @@ const UserProductsScreen = props => {
 			]);
 	}, [error]);
 
+	if (isLoading) return <Loading size="large" color={Colors.primary} />;
+
 	return (
 		<View style={styles.screen}>
-			<FlatList
-				style={{ width: '100%' }}
-				data={userProducts}
-				renderItem={itemData => (
-					<ProductCard
-						title={itemData.item.title}
-						source={itemData.item.imageUrl}
-						price={itemData.item.price}
-						leftButtonTitle="Edit"
-						rightButtonTitle="Delete"
-						leftButtonFunction={() =>
-							props.navigation.navigate('EditProductScreen', itemData.item)
-						}
-						rightButtonFunction={() => deleteMyProduct(itemData.item.id)}
-					/>
-				)}
-			/>
+			{userProducts.length === 0 ? (
+				<Text>No products found, maybe start creating some.</Text>
+			) : (
+				<FlatList
+					style={{ width: '100%' }}
+					data={userProducts}
+					renderItem={itemData => (
+						<ProductCard
+							title={itemData.item.title}
+							source={itemData.item.imageUrl}
+							price={itemData.item.price}
+							leftButtonTitle="Edit"
+							rightButtonTitle="Delete"
+							leftButtonFunction={() =>
+								props.navigation.navigate('EditProductScreen', itemData.item)
+							}
+							rightButtonFunction={() => deleteMyProduct(itemData.item.id)}
+						/>
+					)}
+				/>
+			)}
 		</View>
 	);
 };

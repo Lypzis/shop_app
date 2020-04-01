@@ -13,6 +13,7 @@ export const fetchProducts = () => {
 		try {
 			// auth token
 			const token = getState().auth.idToken;
+			const id = getState().auth.userId;
 			// get request
 			const res = await fetch(`${ApiEndPoint.api}/products.json?auth=${token}`);
 
@@ -26,7 +27,7 @@ export const fetchProducts = () => {
 				loadedProducts.push(
 					new Product(
 						key,
-						'u1',
+						resData[key].ownerId,
 						resData[key].title,
 						resData[key].imageUrl,
 						resData[key].description,
@@ -35,10 +36,13 @@ export const fetchProducts = () => {
 				);
 			}
 
+			const userProducts = loadedProducts.filter(prod => prod.ownerId === id);
+
 			// with the addition of redux thunk, here a dispatch is returned now
 			dispatch({
 				type: SET_PRODUCTS,
-				products: loadedProducts
+				products: loadedProducts,
+				userProducts: userProducts
 			});
 		} catch (err) {
 			// send to custom analytics error
@@ -58,6 +62,7 @@ export const addUserProduct = product => {
 		try {
 			// auth token
 			const token = getState().auth.idToken;
+			const id = getState().auth.userId;
 			const res = await fetch(`${ApiEndPoint.api}/products.json?auth=${token}`, {
 				method: 'POST',
 				headers: {
@@ -67,7 +72,8 @@ export const addUserProduct = product => {
 					imageUrl,
 					price,
 					title,
-					description
+					description,
+					ownerId: id
 				})
 			});
 
@@ -78,7 +84,7 @@ export const addUserProduct = product => {
 			// with the addition of redux thunk, here a dispatch is returned now
 			dispatch({
 				type: ADD_USER_PRODUCT,
-				product: { ...product, id: resData.name }
+				product: { ...product, id: resData.name, ownerId: id }
 			});
 		} catch (err) {
 			throw err;

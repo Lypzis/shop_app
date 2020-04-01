@@ -4,7 +4,6 @@ import {
 	StyleSheet,
 	FlatList,
 	Platform,
-	ActivityIndicator,
 	Text,
 	Button
 } from 'react-native';
@@ -85,14 +84,14 @@ const ShopScreen = props => {
 
 	if (!isLoading && shopProducts.length === 0)
 		return (
-			<View style={styles.loading}>
+			<View style={styles.center}>
 				<Text>No products found. Maybe start adding some! D:</Text>
 			</View>
 		);
 
 	if (error)
 		return (
-			<View style={styles.loading}>
+			<View style={styles.center}>
 				<Text>{error}</Text>
 				<Button title="Reload" onPress={loadProducts} color={Colors.primary} />
 			</View>
@@ -127,6 +126,11 @@ const ShopScreen = props => {
 const styles = StyleSheet.create({
 	screen: {
 		width: '100%'
+	},
+	center: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
 	}
 });
 
