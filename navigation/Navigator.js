@@ -1,13 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 //import AsyncStorage from '@react-native-community/async-storage'; // Needs Ejection :D
 import { useSelector, useDispatch } from 'react-redux';
-import { Platform } from 'react-native';
+import { Platform, SafeAreaView, Button } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import {
+	createDrawerNavigator,
+	DrawerItemList
+} from '@react-navigation/drawer';
 
 import ProductsNavigator from './ProductsNavigator';
 import OrdersNavigator from './OrdersNavigator';
 import ShopNavigator from './ShopNavigator';
+
+import { logout } from '../store/actions/auth';
 
 // REMEMBER: only this screen must appear if user is not authenticated
 import LoginNavigator from './LoginNavigator';
@@ -22,6 +27,8 @@ const DrawerNavigatorShop = props => {
 		state => state.auth.idToken,
 		() => false
 	);
+
+	const dispatch = useDispatch();
 
 	// // will only work after ejection, AsyncStorage needs linking
 	// const [isLoading, setIsLoading] = useState(false);
@@ -57,6 +64,9 @@ const DrawerNavigatorShop = props => {
 	// 			return;
 	// 		}
 
+	//   	//use it in authenticate dispatch
+	//      const expirationTime = expirationDate.getTime() - new Date().getTime();
+
 	// 		setIsLoading(false);
 	// 		setAuthenticated(true);
 	// 		and log the user in with useDispatch authenticate in auth.js
@@ -69,7 +79,23 @@ const DrawerNavigatorShop = props => {
 	// if (isLoading) return <Loading size="large" color={Colors.primary} />;
 
 	return (
-		<Drawer.Navigator drawerContentOptions={{ activeTintColor: Colors.primary }}>
+		<Drawer.Navigator
+			drawerContentOptions={{ activeTintColor: Colors.primary }}
+			drawerContent={props => {
+				return (
+					<SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
+						<DrawerItemList {...props} />
+						{authenticated && (
+							<Button
+								title="Logout"
+								color={Colors.primary}
+								onPress={() => dispatch(logout())}
+							/>
+						)}
+					</SafeAreaView>
+				);
+			}}
+		>
 			{!authenticated ? (
 				<Drawer.Screen
 					name="Sign In"
