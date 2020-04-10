@@ -5,7 +5,7 @@ import {
 	ScrollView,
 	KeyboardAvoidingView,
 	Button,
-	Alert
+	Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch } from 'react-redux';
@@ -21,11 +21,11 @@ const formReducer = (state, action) => {
 	if (action.type === FORM_INPUT_UPDATE) {
 		const updatedValues = {
 			...state.inputValues,
-			[action.input]: action.value
+			[action.input]: action.value,
 		};
 		const updatedValidities = {
 			...state.inputValidities,
-			[action.input]: action.isValid
+			[action.input]: action.isValid,
 		};
 		let updatedFormIsValid = true;
 
@@ -37,7 +37,7 @@ const formReducer = (state, action) => {
 			...state,
 			inputValidities: updatedValidities,
 			inputValues: updatedValues,
-			formIsValid: updatedFormIsValid
+			formIsValid: updatedFormIsValid,
 		};
 	}
 
@@ -51,7 +51,7 @@ const AuthScreen = props => {
 	const [isSignup, setIsSignup] = useState(false);
 
 	props.navigation.setOptions({
-		title: 'Authenticate'
+		title: 'Authenticate',
 	});
 
 	const dispatch = useDispatch();
@@ -59,13 +59,13 @@ const AuthScreen = props => {
 	const initialState = {
 		inputValues: {
 			email: '',
-			password: ''
+			password: '',
 		},
 		inputValidities: {
 			email: false,
-			password: false
+			password: false,
 		},
-		formIsValid: false
+		formIsValid: false,
 	};
 
 	const [formState, dispatchFormState] = useReducer(formReducer, initialState);
@@ -100,7 +100,7 @@ const AuthScreen = props => {
 				type: FORM_INPUT_UPDATE,
 				value: inputValue,
 				isValid: inputValidity,
-				input: inputIdentifier
+				input: inputIdentifier,
 			});
 		},
 		[dispatchFormState]
@@ -109,77 +109,71 @@ const AuthScreen = props => {
 	useEffect(() => {
 		if (error)
 			Alert.alert('Error', error, [
-				{ text: 'Ok', style: 'destructive', onPress: () => setError(null) }
+				{ text: 'Ok', style: 'destructive', onPress: () => setError(null) },
 			]);
 	}, [error]);
 
 	return (
-		<KeyboardAvoidingView
-			behavior="padding"
-			keyboardVerticalOffset={50}
-			style={styles.screen}
-		>
-			<LinearGradient colors={['#ffedff', '#ffe3ff']} style={styles.gradient}>
-				<View style={styles.container}>
-					<ScrollView>
-						<Input
-							id="email"
-							label="E-mail"
-							keyboardType="email-address"
-							required
-							email
-							autoCapitalize="none"
-							errorText="Please enter a valid email address"
-							onInputChange={inputChangeHandler}
-							initialValue=""
-						/>
-						<Input
-							id="password"
-							label="Password"
-							keyboardType="default"
-							secureTextEntry
-							required
-							minLength={5}
-							errorText="Please enter a valid password"
-							onInputChange={inputChangeHandler}
-							initialValue=""
-						/>
-						{isLoading ? (
-							<Loading size="large" color={Colors.primary} />
-						) : (
-							<View style={styles.buttonBox}>
-								<Button
-									title={isSignup ? 'Sign Up' : 'Sign In'}
-									color={Colors.primary}
-									onPress={authHandler}
-								/>
-							</View>
-						)}
+		<LinearGradient colors={['#ffedff', '#ffe3ff']} style={styles.gradient}>
+			<View style={styles.container}>
+				<ScrollView>
+					<Input
+						id='email'
+						label='E-mail'
+						keyboardType='email-address'
+						required
+						email
+						autoCapitalize='none'
+						errorText='Please enter a valid email address'
+						onInputChange={inputChangeHandler}
+						initialValue=''
+					/>
+					<Input
+						id='password'
+						label='Password'
+						keyboardType='default'
+						secureTextEntry
+						required
+						minLength={5}
+						errorText='Please enter a valid password'
+						onInputChange={inputChangeHandler}
+						initialValue=''
+					/>
+					{isLoading ? (
+						<Loading size='large' color={Colors.primary} />
+					) : (
 						<View style={styles.buttonBox}>
 							<Button
-								title={`Switch to ${isSignup ? 'Sign In' : 'Sign Up'}`}
-								color={Colors.secondary}
-								onPress={() => setIsSignup(prevState => !prevState)}
+								title={isSignup ? 'Sign Up' : 'Sign In'}
+								color={Colors.primary}
+								onPress={authHandler}
 							/>
 						</View>
-					</ScrollView>
-				</View>
-			</LinearGradient>
-		</KeyboardAvoidingView>
+					)}
+					<View style={styles.buttonBox}>
+						<Button
+							title={`Switch to ${isSignup ? 'Sign In' : 'Sign Up'}`}
+							color={Colors.secondary}
+							onPress={() => setIsSignup(prevState => !prevState)}
+						/>
+					</View>
+				</ScrollView>
+			</View>
+		</LinearGradient>
 	);
 };
 
 const styles = StyleSheet.create({
 	screen: {
-		flex: 1
+		flex: 1,
 	},
 	buttonBox: {
-		marginTop: 10
+		marginTop: 10,
 	},
 	gradient: {
 		// background color, provided to the expo-linear-gradient component
 		flex: 1, // height and width to 100%
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	container: {
 		width: '80%',
@@ -193,8 +187,8 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		backgroundColor: '#fff',
 
-		elevation: 3 // remember to make this ios compatible as well
-	}
+		elevation: 3, // remember to make this ios compatible as well
+	},
 });
 
 export default AuthScreen;
